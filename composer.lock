@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c284a9c122da36c99a8b6597bdce7aa6",
-    "content-hash": "8b1485987e7c5949da82435d403e52e8",
+    "hash": "75d85b54a1af4d0450173de7c51a48d5",
+    "content-hash": "084f36b8fa0837b465f8bb11caf36210",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -2571,6 +2571,44 @@
                 "xunit"
             ],
             "time": "2015-10-02 06:51:40"
+        },
+        {
+            "name": "regulus/activity-log",
+            "version": "v0.5.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Regulus343/ActivityLog.git",
+                "reference": "facccb1a446c7dd264be21c0615eb194a5e9dcdf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Regulus343/ActivityLog/zipball/facccb1a446c7dd264be21c0615eb194a5e9dcdf",
+                "reference": "facccb1a446c7dd264be21c0615eb194a5e9dcdf",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "5.*",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Regulus\\ActivityLog\\": "src/",
+                    "Regulus\\ActivityLog\\Models\\": "src/models/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cody Jassman",
+                    "email": "me@codyjassman.com"
+                }
+            ],
+            "description": "A clean and simple Laravel 5 activity logger for monitoring user activity on a website or web application.",
+            "time": "2016-02-03 15:49:18"
         },
         {
             "name": "sebastian/comparator",
