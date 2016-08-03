@@ -16,4 +16,5 @@ Route::get('/', function () {
 });
 
 Route::post('api-routes/black-white-list',['as'=>'black-white-list','uses'=>'ApplicationController@blackWhiteList']);
+Route::post('api-routes/app-usage',['as'=>'app-usage','uses'=>'ApplicationController@appUsage']);
 

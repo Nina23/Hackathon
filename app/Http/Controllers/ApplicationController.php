@@ -11,7 +11,7 @@ use App\Http\Requests;
 
 class ApplicationController extends Controller
 {
-    
+
     /*
      * Api for return black and white list and use application from white list
      * */
@@ -49,4 +49,14 @@ class ApplicationController extends Controller
        return response()->json($response);
 
    }
+
+    public function appUsage(Request $request){
+        try {
+            $child = Child::findOrFail($request['CHILD_ID']);
+        }
+        catch (\Exception $e){
+            return response()->json(['error'=>'CHILD']);
+        }
+        
+    }
 }
