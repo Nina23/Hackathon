@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('api-routes/black-white-list',['as'=>'black-white-list','uses'=>'ApplicationController@blackWhiteList']);
+

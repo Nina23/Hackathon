@@ -16,6 +16,7 @@ class CreateApplicationsTable extends Migration
             $table->increments('id');
             $table->integer('child');
             $table->string('name_of_package');
+            $table->string('name_of_application');
             $table->integer('status');
             $table->timestamps();
         });
