@@ -52,12 +52,12 @@ class ApplicationController extends Controller
    }
 
     public function appUsage(Request $request){
-        return var_export($request->all());
-        $json_file= json_decode($request->all(),true);
+      
+        //$json_file= json_decode($request->all(),true);
         //return print_r($json);
         
         try {
-            $child = Child::findOrFail($json_file['CHILD_ID']);
+            $child = Child::findOrFail($request['CHILD_ID']);
            
         }
         catch (\Exception $e){
@@ -65,16 +65,16 @@ class ApplicationController extends Controller
         }
         
         
-        foreach ($json_file["ALL_INSTALLED_APPLICATIONS"] as $instaled_app){
-            $used_app= Applications::where('name_of_package',$instaled_app['PACKAGE_NAME'])->where('child',$json_file['CHILD_ID'])->first();
+        foreach ($$request["ALL_INSTALLED_APPLICATIONS"] as $instaled_app){
+            $used_app= Applications::where('name_of_package',$instaled_app['PACKAGE_NAME'])->where('child',$reques['CHILD_ID'])->first();
             if($used_app==NULL){
-                Applications::create(['child'=>$json_file['CHILD_ID'],'name_of_package'=>$instaled_app['PACKAGE_NAME'],'name_of_application'=>$instaled_app['APPLICATION_NAME']]);
+                Applications::create(['child'=>$request['CHILD_ID'],'name_of_package'=>$instaled_app['PACKAGE_NAME'],'name_of_application'=>$instaled_app['APPLICATION_NAME']]);
             }
             
         }
         
-        foreach ($json_file['APPLICATION_USAGE'] as $app_usage){
-            $app=  Applications::where('name_of_package',$app_usage['PACKAGE_NAME'])->where('child',$json_file['CHILD_ID'])->first();
+        foreach ($request['APPLICATION_USAGE'] as $app_usage){
+            $app=  Applications::where('name_of_package',$app_usage['PACKAGE_NAME'])->where('child',$request['CHILD_ID'])->first();
             if($app==NULL){
                $new_app= Applications::create(['name_of_package'=>$instaled_app['PACKAGE_NAME'],'name_of_application'=>$instaled_app['APPLICATION_NAME']]);
                ScheduleApp::create(['application'=>$new_app['id'],'interval'=>$app_usage['INTERVAL'],'day'=>$app_usage['DAY'],'time'=>$app_usage['TIME']]);
