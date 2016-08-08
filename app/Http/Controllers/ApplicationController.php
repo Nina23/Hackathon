@@ -64,6 +64,8 @@ class ApplicationController extends Controller
             return response()->json(['error'=>'CHILD']);
         }
         
+        return var_export($child);
+        
         
         foreach ($$request["ALL_INSTALLED_APPLICATIONS"] as $instaled_app){
             $used_app= Applications::where('name_of_package',$instaled_app['PACKAGE_NAME'])->where('child',$reques['CHILD_ID'])->first();
