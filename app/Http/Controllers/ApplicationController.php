@@ -51,7 +51,7 @@ class ApplicationController extends Controller
    }
 
     public function appUsage(Request $request){
-        return $request;
+        return var_export($request->all());
         $json_file= json_decode($request->all(),true);
         //return print_r($json);
         
