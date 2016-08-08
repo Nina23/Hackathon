@@ -104,6 +104,8 @@ class ApplicationController extends Controller
        $net_usage= ScheduleNet::where('child',$request['CHILD_ID'])->first();
        $counter=0;
        $net_list=[];
+       if($net_usage==null)
+           return response()->json(['MESSAGE'=>'No schedule']);
        foreach($net_usage as $net){
             $net_list[$counter] =['DAY'=>$net_usage->day,'INTERVAL'=>$net_usage->interval,'TIME'=>$net_usage->time];
            
