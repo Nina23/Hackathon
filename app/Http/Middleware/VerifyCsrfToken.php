@@ -13,6 +13,6 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         'api-routes/black-white-list',
-        'api-routes/app-usage'
+        'api-routes/app-usage',
     ];
 }
