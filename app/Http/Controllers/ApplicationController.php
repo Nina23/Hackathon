@@ -78,17 +78,17 @@ class ApplicationController extends Controller
         
         foreach ($request['APPLICATION_USAGE'] as $app_usage){
             $app=  Applications::where('name_of_package',$app_usage['PACKAGE_NAME'])->where('child',$request['CHILD_ID'])->first();
-            if($app==NULL){
-               $new_app= Applications::create(['name_of_package'=>$instaled_app['PACKAGE_NAME'],'name_of_application'=>$instaled_app['APPLICATION_NAME']]);
-               UseApp::create(['application'=>$new_app['id'],'child'=>$request['CHILD_ID'],'interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$instaled_app['TIME']]);
-            }
-            else{
-                $use_app=  UseApp::where('application',$app->id)->where('child',$request['CHILD_ID'])->first();
-                if($schedule_app==null)
-                    UseApp::create(['application'=>$new_app['id'],'child'=>$request['CHILD_ID'],'interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$instaled_app['TIME']]);
-                else
-                    $use_app->update(['interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$app_usage['TIME']]);
-            }
+           // if($app==NULL){
+              // $new_app= Applications::create(['name_of_package'=>$instaled_app['PACKAGE_NAME'],'name_of_application'=>$instaled_app['APPLICATION_NAME']]);
+             //  UseApp::create(['application'=>$new_app['id'],'child'=>$request['CHILD_ID'],'interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$instaled_app['TIME']]);
+            //}
+            //else{
+               // $use_app=  UseApp::where('application',$app->id)->where('child',$request['CHILD_ID'])->first();
+                //if($schedule_app==null)
+               UseApp::create(['application'=>$app['id'],'child'=>$request['CHILD_ID'],'interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$instaled_app['DAY']]);
+               // else
+                   // $use_app->update(['interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$app_usage['TIME']]);
+           // }
         }
         
         return response()->json(['MESSAGE'=>201]);
