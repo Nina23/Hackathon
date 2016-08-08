@@ -64,16 +64,18 @@ class ApplicationController extends Controller
             return response()->json(['error'=>'CHILD']);
         }
         
-        return var_export($child->first_name);
+      
         
         
-        foreach ($$request["ALL_INSTALLED_APPLICATIONS"] as $instaled_app){
-            $used_app= Applications::where('name_of_package',$instaled_app['PACKAGE_NAME'])->where('child',$reques['CHILD_ID'])->first();
+        foreach ($request["ALL_INSTALLED_APPLICATIONS"] as $instaled_app){
+            $used_app= Applications::where('name_of_package',$instaled_app['PACKAGE_NAME'])->where('child',$request['CHILD_ID'])->first();
             if($used_app==NULL){
                 Applications::create(['child'=>$request['CHILD_ID'],'name_of_package'=>$instaled_app['PACKAGE_NAME'],'name_of_application'=>$instaled_app['APPLICATION_NAME']]);
             }
             
         }
+        
+        return var_export('prosao');
         
         foreach ($request['APPLICATION_USAGE'] as $app_usage){
             $app=  Applications::where('name_of_package',$app_usage['PACKAGE_NAME'])->where('child',$request['CHILD_ID'])->first();
