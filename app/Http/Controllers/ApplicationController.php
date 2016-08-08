@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Applications;
 use App\Child;
 use App\ScheduleApp;
+use App\ScheduleNet;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -89,7 +90,28 @@ class ApplicationController extends Controller
         
         return response()->json(['MESSAGE'=>201]);
         
-        
-        
     }
+    
+    public function netUsage(Request $request){
+        $request['CHILD_ID']=1;
+       try {
+           $child = Child::findOrFail($request['CHILD_ID']);
+       }
+       catch (\Exception $e){
+           return response()->json(['error'=>'CHILD']);
+       }
+
+       $net_usage= ScheduleNet::where('child',$request['CHILD_ID'])->first();
+       $counter=0;
+       $net_list=[];
+       foreach($net_usage as $net){
+            $net_list[$counter] =['DAY'=>$net_usage->day,'INTERVAL'=>$net_usage->interval,'TIME'=>$net_usage->time];
+           
+       }
+       $response=["CHILD_ID"=>$request['CHILD_ID'],"NTERNET_SCHEDULE"=>array_values($net_list)];
+
+       return response()->json($response);
+
+   }
+    
 }
