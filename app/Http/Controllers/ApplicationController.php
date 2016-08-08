@@ -64,7 +64,7 @@ class ApplicationController extends Controller
             return response()->json(['error'=>'CHILD']);
         }
         
-        return var_export($child);
+        return var_export($child->first_name);
         
         
         foreach ($$request["ALL_INSTALLED_APPLICATIONS"] as $instaled_app){
