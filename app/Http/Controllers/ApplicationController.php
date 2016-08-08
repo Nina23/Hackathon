@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Applications;
 use App\Child;
-use App\ScheduleApp;
+use App\UseApp;
 use App\ScheduleNet;
 use Illuminate\Http\Request;
 
@@ -74,21 +74,20 @@ class ApplicationController extends Controller
             }
             
         }
-        
-        return var_export('prosao');
+       
         
         foreach ($request['APPLICATION_USAGE'] as $app_usage){
             $app=  Applications::where('name_of_package',$app_usage['PACKAGE_NAME'])->where('child',$request['CHILD_ID'])->first();
             if($app==NULL){
                $new_app= Applications::create(['name_of_package'=>$instaled_app['PACKAGE_NAME'],'name_of_application'=>$instaled_app['APPLICATION_NAME']]);
-               ScheduleApp::create(['application'=>$new_app['id'],'interval'=>$app_usage['INTERVAL'],'day'=>$app_usage['DAY'],'time'=>$app_usage['TIME']]);
+               UseApp::create(['application'=>$new_app['id'],'child'=>$request['CHILD_ID'],'interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$instaled_app['TIME']]);
             }
             else{
-                $schedule_app=  ScheduleApp::where('application',$app->id)->first();
+                $use_app=  UseApp::where('application',$app->id)->where('child',$request['CHILD_ID'])->first();
                 if($schedule_app==null)
-                    ScheduleApp::create(['application'=>$app['id'],'interval'=>$app_usage['INTERVAL'],'day'=>$app_usage['DAY'],'time'=>$app_usage['TIME']]);
+                    UseApp::create(['application'=>$new_app['id'],'child'=>$request['CHILD_ID'],'interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$instaled_app['TIME']]);
                 else
-                    $schedule_app->update(['interval'=>$app_usage['INTERVAL'],'day'=>$app_usage['DAY'],'time'=>$app_usage['TIME']]);
+                    $use_app->update(['interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$app_usage['TIME']]);
             }
         }
         
