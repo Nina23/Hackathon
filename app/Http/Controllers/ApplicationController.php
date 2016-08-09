@@ -20,7 +20,6 @@ class ApplicationController extends Controller
 
 
    public function blackWhiteList(Request $request){
-      $request['CHILD_ID']=1;
        try {
            $child = Child::findOrFail($request['CHILD_ID']);
        }
@@ -41,10 +40,13 @@ class ApplicationController extends Controller
            if($app->status==1) {
                $schedule_app=ScheduleApp::where('application',$app->id)->first();
                if($schedule_app!=null)
-                    $white_list[$counter_white] = ['PACKAGE_NAME' => $app->name_of_package,'DAY'=>$schedule_app->day,'INTERVAL'=>$schedule_app->interval,'TIME'=>$schedule_app->time];
+                    $white_list[$counter_white] = ['PACKAGE_NAME' => $app->name_of_package,'APPLICATION_NAME'=>$app->name_of_application,'DAY'=>$schedule_app->day,'INTERVAL'=>$schedule_app->interval,'TIME'=>$schedule_app->time];
+               else
+                    $white_list[$counter_white] = ['PACKAGE_NAME' => $app->name_of_package, 'APPLICATION_NAME'=>$app->name_of_application];
+                   
            }
            if($app->status==2)
-               $black_list[$counter_black]=['PACKAGE_NAME'=>$app->name_of_package];
+               $black_list[$counter_black]=['PACKAGE_NAME'=>$app->name_of_package,'APPLICATION_NAME'=>$app->name_of_application];
            $counter_white++;
            $counter_black++;
        }
