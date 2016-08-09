@@ -19,9 +19,8 @@ class ApplicationController extends Controller
 
 
    public function blackWhiteList(Request $request){
-       return response()->json($request->all());
        try {
-           $child = Child::findOrFail($request['CHILD_ID']);
+           $child = Child::findOrFail(1);
        }
        catch (\Exception $e){
            return response()->json(['error'=>'CHILD']);
