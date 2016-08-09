@@ -6,6 +6,7 @@ use App\Applications;
 use App\Child;
 use App\UseApp;
 use App\ScheduleNet;
+use App\ScheduleApp;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
