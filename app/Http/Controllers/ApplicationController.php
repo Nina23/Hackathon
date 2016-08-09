@@ -28,6 +28,8 @@ class ApplicationController extends Controller
        }
 
        $appliactions=Applications::where('child',$request['CHILD_ID'])->get();
+       
+       return response()->json('nina');
 
        $black_list=[];
        $white_list=[];
