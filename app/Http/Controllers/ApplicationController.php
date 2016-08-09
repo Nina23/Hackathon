@@ -19,7 +19,7 @@ class ApplicationController extends Controller
 
 
    public function blackWhiteList(Request $request){
-       return var_export($request->all());
+       return response()->json($request->all());
        try {
            $child = Child::findOrFail($request['CHILD_ID']);
        }
