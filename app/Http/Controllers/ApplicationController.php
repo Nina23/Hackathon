@@ -29,7 +29,7 @@ class ApplicationController extends Controller
 
        $appliactions=Applications::where('child',$request['CHILD_ID'])->get();
        
-       return response()->json('nina');
+     
 
        $black_list=[];
        $white_list=[];
@@ -39,7 +39,8 @@ class ApplicationController extends Controller
        foreach($appliactions as $app){
            if($app->status==1) {
                $schedule_app=ScheduleApp::where('application',$app->id)->first();
-               $white_list[$counter_white] = ['PACKAGE_NAME' => $app->name_of_package,'DAY'=>$schedule_app->day,'INTERVAL'=>$schedule_app->interval,'TIME'=>$schedule_app->time];
+               if($schedule_app!=null)
+                    $white_list[$counter_white] = ['PACKAGE_NAME' => $app->name_of_package,'DAY'=>$schedule_app->day,'INTERVAL'=>$schedule_app->interval,'TIME'=>$schedule_app->time];
            }
            if($app->status==2)
                $black_list[$counter_black]=['PACKAGE_NAME'=>$app->name_of_package];
