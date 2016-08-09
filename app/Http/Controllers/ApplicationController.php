@@ -96,7 +96,6 @@ class ApplicationController extends Controller
     }
     
     public function netUsage(Request $request){
-        $request['CHILD_ID']=1;
        try {
            $child = Child::findOrFail($request['CHILD_ID']);
        }
