@@ -115,6 +115,7 @@ class ApplicationController extends Controller
        $net_list=[];
        if($net_usage==null)
            return response()->json(['MESSAGE'=>'No schedule']);
+       return response()->json($net_usage);
        foreach($net_usage as $net){
             $net_list[$counter] =['DAY'=>$net_usage->day,'INTERVAL'=>$net_usage->interval,'TIME'=>$net_usage->time];
            
