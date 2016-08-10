@@ -110,7 +110,7 @@ class ApplicationController extends Controller
            return response()->json(['error'=>'CHILD']);
        }
 
-       $net_usage= ScheduleNet::where('child',$request['CHILD_ID'])->first();
+       $net_usage= ScheduleNet::where('child',$request['CHILD_ID'])->get();
        $counter=0;
        $net_list=[];
        if($net_usage==null)
