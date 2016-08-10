@@ -92,7 +92,7 @@ class ApplicationController extends Controller
             //else{
                // $use_app=  UseApp::where('application',$app->id)->where('child',$request['CHILD_ID'])->first();
                 //if($schedule_app==null)
-               UseApp::create(['application'=>$app['id'],'child'=>$request['CHILD_ID'],'interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$instaled_app['DAY']]);
+               UseApp::create(['application'=>$app['id'],'child'=>$request['CHILD_ID'],'interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$app_usage['DAY']]);
                // else
                    // $use_app->update(['interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$app_usage['TIME']]);
            // }
