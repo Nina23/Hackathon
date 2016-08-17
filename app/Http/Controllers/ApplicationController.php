@@ -7,6 +7,7 @@ use App\Child;
 use App\UseApp;
 use App\ScheduleNet;
 use App\ScheduleApp;
+use App\ScheduleChild;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -121,10 +122,32 @@ class ApplicationController extends Controller
             $counter++;
            
        }
-       $response=["CHILD_ID"=>$request['CHILD_ID'],"NTERNET_SCHEDULE"=>array_values($net_list)];
+       $response=["CHILD_ID"=>$request['CHILD_ID'],"INTERNET_SCHEDULE"=>array_values($net_list)];
 
        return response()->json($response);
 
+   }
+    public function childSchedule(Request $request){
+        try {
+           $child = Child::findOrFail($request['CHILD_ID']);
+       }
+       catch (\Exception $e){
+           return response()->json(['error'=>'CHILD']);
+       }
+         
+       
+       
+       $shedule_child= ScheduleChild::where('child',$request['CHILD_ID'])->get();
+      
+       $event_list=[];
+       $counter=0;
+       foreach($shedule_child as $shedule){
+           $event_list[$counter]=['TIME'=>$shedule['time'],'EVENT'=>$shedule['note']];
+           $counter++;
+       }
+       $response=["CHILD_ID"=>$request['CHILD_ID'],"EVENTS_SCHEDULE"=>  array_values($event_list)];
+         return response()->json($response);
+       
    }
     
 }

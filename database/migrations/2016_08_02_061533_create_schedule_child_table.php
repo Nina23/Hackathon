@@ -15,7 +15,7 @@ class CreateScheduleChildTable extends Migration
         Schema::create('schedule_child', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('child');
-            $table->integer('time');
+            $table->timestamp('time');
             $table->string('note');
             $table->timestamps();
         });
