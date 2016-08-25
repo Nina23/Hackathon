@@ -19,4 +19,5 @@ Route::post('api-routes/black-white-list',['as'=>'black-white-list','uses'=>'App
 Route::post('api-routes/app-usage',['as'=>'app-usage','uses'=>'ApplicationController@appUsage']);
 Route::post('api-routes/net-usage',['as'=>'net-usage','uses'=>'ApplicationController@netUsage']);
 Route::post('api-routes/child-schedule',['as'=>'net-usage','uses'=>'ApplicationController@childSchedule']);
+Route::post('api-routes/save-location',['as'=>'save-location','uses'=>'ApplicationController@saveLocation']);
 

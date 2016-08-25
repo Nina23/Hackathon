@@ -9,6 +9,7 @@ use App\ScheduleNet;
 use App\ScheduleApp;
 use App\ScheduleChild;
 use Illuminate\Http\Request;
+use App\Location;
 
 use App\Http\Requests;
 
@@ -147,6 +148,27 @@ class ApplicationController extends Controller
        }
        $response=["CHILD_ID"=>$request['CHILD_ID'],"EVENTS_SCHEDULE"=>  array_values($event_list)];
          return response()->json($response);
+       
+   }
+   
+   public function saveLocation(Request $request){
+       
+       
+       try {
+           $child = Child::findOrFail($request['CHILD_ID']);
+       }
+       catch (\Exception $e){
+           return response()->json(['error'=>'CHILD']);
+       }
+       
+       
+       foreach($request['LOCATIONS'] as $location){
+           Location::create(['child'=>$request['CHILD_ID'],'lang'=>$location['LANG'],'lat'=>$location['LAT'],'time_of_location'=>$location['TIME']]);
+       }
+       
+       $response=['SUCCESS'=>true];
+        return response()->json($response);
+       
        
    }
     
