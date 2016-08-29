@@ -50,6 +50,7 @@ class ApplicationController extends Controller
            if($app->status==2)
                $black_list[$counter_black]=['PACKAGE_NAME'=>$app->name_of_package,'APPLICATION_NAME'=>$app->name_of_application];
            $counter_white++;
+           
            $counter_black++;
        }
 
@@ -143,7 +144,7 @@ class ApplicationController extends Controller
        $event_list=[];
        $counter=0;
        foreach($shedule_child as $shedule){
-           $event_list[$counter]=['TIME'=>$shedule['time'],'EVENT'=>$shedule['note']];
+           $event_list[$counter]=['EVENT_ID'=>$shedule['id'],'TIME'=>$shedule['time'],'EVENT'=>$shedule['note']];
            $counter++;
        }
        $response=["CHILD_ID"=>$request['CHILD_ID'],"EVENTS_SCHEDULE"=>  array_values($event_list)];
