@@ -16,6 +16,7 @@ class VerifyCsrfToken extends BaseVerifier
         'api-routes/app-usage',
         'api-routes/net-usage',
         'api-routes/child-schedule',
-        'api-routes/save-location'
+        'api-routes/save-location',
+        'api-routes/save-event',
     ];
 }

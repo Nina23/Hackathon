@@ -169,7 +169,35 @@ class ApplicationController extends Controller
        
        $response=['SUCCESS'=>true];
         return response()->json($response);
+   }
+   public function saveEvent(Request $request){
+       try {
+           $child = Child::findOrFail($request['CHILD_ID']);
+       }
+       catch (\Exception $e){
+           return response()->json(['error'=>'CHILD']);
+       }
+       if($request['ACTION']==1){
+           ScheduleChild::create(['child'=>$request['CHILD_ID'],'time'=>$request['TIME'],'note'=>$request['EVENT']]);
+       }
+       elseif($request['ACTION']==2){
+       $shedule_child= ScheduleChild::where('id',$request['EVENT_ID'])->where('child',$request['CHILD_ID'])->first();
+       $shedule_child->update(['time'=>$request['TIME'],'note'=>$request['EVENT']]);
+       }
+       elseif($request['ACTION']==3){
+           $shedule_child= ScheduleChild::where('id',$request['EVENT_ID'])->where('child',$request['CHILD_ID'])->first();
+           $shedule_child->delete();
+       }
        
+       else{
+           $response=['ACTION'=>'0'];
+        return response()->json($response);
+       }
+       $response=['SUCCESS'=>true];
+       return response()->json($response);
+       
+       
+     
        
    }
     
