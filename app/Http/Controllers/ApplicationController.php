@@ -216,12 +216,13 @@ class ApplicationController extends Controller
             
             $use_app_list=[];
             $counter_app=0;
-            $use_app=UseApp::where('child',$request['CHILD_ID'])->where('application',$app->id)->first();
+            $use_app=UseApp::where('child',$request['CHILD_ID'])->where('application',$app->id)->get();
             //return print_r($use_app);
             if($use_app!=NULL){
-                
-                $use_app_list[$counter_app]=['TIME_OF_CREATION'=>$use_app->time_of_creation,'INTERVAL'=>$use_app->interval];
+                foreach($use_app as $app_day){
+                $use_app_list[$counter_app]=['TIME_OF_CREATION'=>$app_day->time_of_creation,'INTERVAL'=>$app_day->interval];
                 $counter_app++;
+                }
             }
              
             if($app!=null)
