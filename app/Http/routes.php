@@ -21,4 +21,5 @@ Route::post('api-routes/net-usage',['as'=>'net-usage','uses'=>'ApplicationContro
 Route::post('api-routes/child-schedule',['as'=>'net-usage','uses'=>'ApplicationController@childSchedule']);
 Route::post('api-routes/save-location',['as'=>'save-location','uses'=>'ApplicationController@saveLocation']);
 Route::post('api-routes/save-event',['as'=>'save-event','uses'=>'ApplicationController@saveEvent']);
+Route::post('api-routes/all-instaled-app',['as'=>'all-instaled-app','uses'=>'ApplicationController@allInstaledApp']);
 

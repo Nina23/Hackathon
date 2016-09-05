@@ -53,10 +53,7 @@ class ApplicationController extends Controller
            
            $counter_black++;
        }
-
-
        $response=["CHILD_ID"=>$request['CHILD_ID'],"APP_BLACKLIST"=>array_values($black_list),"APP_WHITELIST"=>array_values($white_list)];
-
        return response()->json($response);
 
    }
@@ -74,9 +71,6 @@ class ApplicationController extends Controller
             return response()->json(['error'=>'CHILD']);
         }
         
-      
-        
-        
         foreach ($request["ALL_INSTALLED_APPLICATIONS"] as $instaled_app){
             $used_app= Applications::where('name_of_package',$instaled_app['PACKAGE_NAME'])->where('child',$request['CHILD_ID'])->first();
             if($used_app==NULL){
@@ -85,7 +79,6 @@ class ApplicationController extends Controller
             
         }
        
-        
         foreach ($request['APPLICATION_USAGE'] as $app_usage){
             $app=  Applications::where('name_of_package',$app_usage['PACKAGE_NAME'])->where('child',$request['CHILD_ID'])->first();
            // if($app==NULL){
@@ -196,9 +189,53 @@ class ApplicationController extends Controller
        $response=['SUCCESS'=>true];
        return response()->json($response);
        
+   }
+   
+   public function allInstaledApp(Request $request){
+       //$request['CHILD_ID']=2;
+       try {
+            $child = Child::findOrFail($request['CHILD_ID']);
+           
+        }
+        catch (\Exception $e){
+            return response()->json(['error'=>'CHILD']);
+        }
+        $applications = Applications::where('child',$request['CHILD_ID'])->get();
+        $app_list=[];
+        $counter_all_app=0;
+        foreach ($applications as $app){
+           
+            $counter=0;
+            $schedule_list=[];
+            $schedule_app=  ScheduleApp::where('application',$app->id)->first();
+            if($schedule_app!=null){
+                $schedule_list[$counter]=['SCHEDULE_ID'=>$schedule_app->id,'DAY'=>$schedule_app->day,'TIME'=>$schedule_app->time,'INTERVAL'=>$schedule_app->interval];
+                $counter++;
+            }
+            
+            
+            $use_app_list=[];
+            $counter_app=0;
+            $use_app=UseApp::where('child',$request['CHILD_ID'])->where('application',$app->id)->first();
+            //return print_r($use_app);
+            if($use_app!=NULL){
+                
+                $use_app_list[$counter_app]=['TIME_OF_CREATION'=>$use_app->time_of_creation,'INTERVAL'=>$use_app->interval];
+                $counter_app++;
+            }
+             
+            if($app!=null)
+            {
+                $app_list[$counter_all_app]=['APPLICATION_NAME'=>$app->name_of_application,'APPLICATION_ID'=>$app->id,'APPLICATION_STATUS'=>$app->status,'APPLICATION_SCHEDULE'=>array_values($schedule_list),'APPLICATION_USAGE'=>array_values($use_app_list)];
+            $counter_all_app++;
+            }
+            
+        }
+        
+         $response=["APPLICATION_LISTS"=>  array_values($app_list)];
+         return response()->json($response);
        
-     
-       
+        
    }
     
 }
