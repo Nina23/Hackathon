@@ -300,7 +300,7 @@ class ApplicationController extends Controller
      
         $schedule_app=ScheduleApp::create(['child'=>$request['CHILD_ID'],'application'=>$request['APPLICATION_ID'],'day'=>$request['DAY'],'time'=>$request['TIME'],'interval'=>$request['INTERVAL']]);
        
-        $response=['APPLICATION_ID'=>$schedule_app['application'],'SCHEDULE_ID'=>$schedule_app['id'],'DAY'=>$schedule_app['day'],'INTERVAL'=>$schedule_app['INTERVAL'],'TIME'=>$schedule_app['time']];
+        $response=['APPLICATION_ID'=>$schedule_app['application'],'SCHEDULE_ID'=>$schedule_app['id'],'DAY'=>$schedule_app['day'],'INTERVAL'=>$schedule_app['interval'],'TIME'=>$schedule_app['time']];
        return response()->json($response);
         
         }
