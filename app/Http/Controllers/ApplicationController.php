@@ -297,12 +297,9 @@ class ApplicationController extends Controller
             return response()->json(['error'=>'CHILD']);
         }
          //return response()->json(['nina'=>true]);
-        $app=  ScheduleApp::where('application',$request['APPLICATION_ID'])->first();
-        if($app==null)
+     
         $schedule_app=ScheduleApp::create(['child'=>$request['CHILD_ID'],'application'=>$request['APPLICATION_ID'],'day'=>$request['DAY'],'time'=>$request['TIME'],'interval'=>$request['INTERVAL']]);
-       else{
-           return response()->json(['error'=>'Schedule with this application exists']);
-       }
+       
         $response=['APPLICATION_ID'=>$schedule_app['application'],'SCHEDULE_ID'=>$schedule_app['id'],'DAY'=>$schedule_app['day'],'INTERVAL'=>$schedule_app['INTERVAL'],'TIME'=>$schedule_app['time']];
        return response()->json($response);
         
