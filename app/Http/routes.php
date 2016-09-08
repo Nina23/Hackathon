@@ -22,4 +22,8 @@ Route::post('api-routes/child-schedule',['as'=>'net-usage','uses'=>'ApplicationC
 Route::post('api-routes/save-location',['as'=>'save-location','uses'=>'ApplicationController@saveLocation']);
 Route::post('api-routes/save-event',['as'=>'save-event','uses'=>'ApplicationController@saveEvent']);
 Route::post('api-routes/all-instaled-app',['as'=>'all-instaled-app','uses'=>'ApplicationController@allInstaledApp']);
+Route::post('api-routes/change-status-app',['as'=>'change-status-app','uses'=>'ApplicationController@changeStatusApp']);
+Route::post('api-routes/change-schedule-app',['as'=>'change-schedule-app','uses'=>'ApplicationController@changeScheduleApp']);
+Route::post('api-routes/create-schedule-app',['as'=>'create-schedule-app','uses'=>'ApplicationController@createScheduleApp']);
+Route::post('api-routes/all-locations-child',['as'=>'all-locations-child','uses'=>'ApplicationController@allLocationsChild']);
 

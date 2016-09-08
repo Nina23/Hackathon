@@ -238,5 +238,95 @@ class ApplicationController extends Controller
        
         
    }
+   
+   public function changeStatusApp(Request $request){
+       
+       try {
+            $child = Child::findOrFail($request['CHILD_ID']);
+           
+        }
+        catch (\Exception $e){
+            return response()->json(['error'=>'CHILD']);
+        }
+        
+        
+        
+        $app=Applications::where('child',$request['CHILD_ID'])->where('id',$request['APPLICATION_ID'])->first();
+        
+        if($app!=null){
+           
+            $app->update(['status'=>$request['APPLICATIONS_STATUS']]);
+        }
+        else{
+            return response()->json(['error'=>'Application does not exists']);
+        }
+        
+        
+        $response=['APPLICATION_STATUS'=>$app['status']];
+       return response()->json($response);
+      
+   }
+   
+   public function changeScheduleApp(Request $request){
+       try {
+            $child = Child::findOrFail($request['CHILD_ID']);
+           
+        }
+        catch (\Exception $e){
+            return response()->json(['error'=>'CHILD']);
+        }
+        
+        $schedule_app= ScheduleApp::where('id',$request['SCHEDULE_ID'])->where('application',$request['APPLICATION'])->first();
+        if($schedule_app!=null){
+            $schedule_app->update(['day'=>$request['DAY'],'time'=>$request['TIME'],'interval'=>$request['INTERVAL']]);
+        }
+         else{
+            return response()->json(['error'=>'Schedule does not exists']);
+        }
+        
+        $response=['SCHEDULE_ID'=>$schedule_app['id'],'DAY'=>$schedule_app['day'],'INTERVAL'=>$schedule_app['INTERVAL'],'TIME'=>$schedule_app['time']];
+       return response()->json($response);
+   }
+   
+   public function createScheduleApp(Request $request){
+       try {
+            $child = Child::findOrFail($request['CHILD_ID']);
+           
+        }
+        catch (\Exception $e){
+            return response()->json(['error'=>'CHILD']);
+        }
+         //return response()->json(['nina'=>true]);
+        $app=  ScheduleApp::where('application',$request['APPLICATION_ID'])->first();
+        if($app==null)
+        $schedule_app=ScheduleApp::create(['child'=>$request['CHILD_ID'],'application'=>$request['APPLICATION_ID'],'day'=>$request['DAY'],'time'=>$request['TIME'],'interval'=>$request['INTERVAL']]);
+       else{
+           return response()->json(['error'=>'Schedule with this application exists']);
+       }
+        $response=['APPLICATION_ID'=>$schedule_app['application'],'SCHEDULE_ID'=>$schedule_app['id'],'DAY'=>$schedule_app['day'],'INTERVAL'=>$schedule_app['INTERVAL'],'TIME'=>$schedule_app['time']];
+       return response()->json($response);
+        
+        }
+        
+        public function allLocationsChild(Request $request){
+            try {
+            $child = Child::findOrFail($request['CHILD_ID']);
+           
+        }
+        catch (\Exception $e){
+            return response()->json(['error'=>'CHILD']);
+        }
+        $locations=  Location::where('child',$request['CHILD_ID'])->orderBy('time_of_location', 'desc')->get();
+        $counter=0;
+        $locations_list=[];
+        foreach($locations as $location){
+            $locations_list[$counter]=['LAT'=>$location['lat'],'LNG'=>$location['LANG'],'TIME'=>$location['time_of_location']];
+            $counter++;
+        }
+        $response=['CHILD_ID'=>$request['CHILD_ID'],'LOCATIONS'=>  array_values($locations_list)];
+        
+        return response()->json($response);
+        
+        }
     
 }
