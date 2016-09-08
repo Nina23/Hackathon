@@ -317,7 +317,7 @@ class ApplicationController extends Controller
         $counter=0;
         $locations_list=[];
         foreach($locations as $location){
-            $locations_list[$counter]=['LAT'=>$location['lat'],'LNG'=>$location['LANG'],'TIME'=>$location['time_of_location']];
+            $locations_list[$counter]=['LAT'=>$location['lat'],'LNG'=>$location['lang'],'TIME'=>$location['time_of_location']];
             $counter++;
         }
         $response=['CHILD_ID'=>$request['CHILD_ID'],'LOCATIONS'=>  array_values($locations_list)];
