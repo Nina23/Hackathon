@@ -284,7 +284,7 @@ class ApplicationController extends Controller
             return response()->json(['error'=>'Schedule does not exists']);
         }
         
-        $response=['SCHEDULE_ID'=>$schedule_app['id'],'DAY'=>$schedule_app['day'],'INTERVAL'=>$schedule_app['INTERVAL'],'TIME'=>$schedule_app['time']];
+        $response=['SCHEDULE_ID'=>$schedule_app['id'],'DAY'=>$schedule_app['day'],'INTERVAL'=>$schedule_app['interval'],'TIME'=>$schedule_app['time']];
        return response()->json($response);
    }
    
