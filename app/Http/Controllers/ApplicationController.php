@@ -146,7 +146,7 @@ class ApplicationController extends Controller
    }
    
    public function saveLocation(Request $request){
-       return print_r($request->all());
+       //return print_r($request->all());
        
        try {
            $child = Child::findOrFail($request['CHILD_ID']);
@@ -157,7 +157,12 @@ class ApplicationController extends Controller
        
        
        foreach($request['LOCATIONS'] as $location){
-           Location::create(['child'=>$request['CHILD_ID'],'lang'=>$location['LANG'],'lat'=>$location['LAT'],'time_of_location'=>$location['TIME'],'speed'=>$location['SPEED'],'state'=>$location['STATE'],'accuracy'=>$location['ACCURACY'],'provider'=>$location['PROVIDER']]);
+           Location::create(['child'=>$request['CHILD_ID'],'lang'=>$location['LANG'],'lat'=>$location['LAT'],'time_of_location'=>$location['TIME'],
+               'speed'=>$location['SPEED']
+//               'state'=>$location['STATE'],
+//               'accuracy'=>$location['ACCURACY'],
+//               'provider'=>$location['PROVIDER']
+                   ]);
        }
        
        $response=['SUCCESS'=>true];
