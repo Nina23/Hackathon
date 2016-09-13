@@ -17,6 +17,10 @@ class CreateLocationTable extends Migration
             $table->integer('child');
             $table->string('lang');
             $table->string('lat');
+            $table->string('state');
+            $table->string('speed');
+            $table->string('accurancy');
+            $table->string('provider');
             $table->timestamp('time_of_location');
             $table->timestamps();
         });
