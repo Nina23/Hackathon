@@ -160,8 +160,8 @@ class ApplicationController extends Controller
            Location::create(['child'=>$request['CHILD_ID'],'lang'=>$location['LANG'],'lat'=>$location['LAT'],'time_of_location'=>$location['TIME'],
                'speed'=>$location['SPEED'],
                'state'=>$location['STATE'],
-               'accuracy'=>$location['ACCURACY']
-//               'provider'=>$location['PROVIDER']
+               'accuracy'=>$location['ACCURACY'],
+               'provider'=>$location['PROVIDER']
                    ]);
        }
        
