@@ -146,7 +146,7 @@ class ApplicationController extends Controller
    }
    
    public function saveLocation(Request $request){
- 
+       return print_r($request->all());
        
        try {
            $child = Child::findOrFail($request['CHILD_ID']);
