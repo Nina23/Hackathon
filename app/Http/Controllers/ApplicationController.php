@@ -158,8 +158,8 @@ class ApplicationController extends Controller
        
        foreach($request['LOCATIONS'] as $location){
            Location::create(['child'=>$request['CHILD_ID'],'lang'=>$location['LANG'],'lat'=>$location['LAT'],'time_of_location'=>$location['TIME'],
-               'speed'=>$location['SPEED']
-//               'state'=>$location['STATE'],
+               'speed'=>$location['SPEED'],
+               'state'=>$location['STATE']
 //               'accuracy'=>$location['ACCURACY'],
 //               'provider'=>$location['PROVIDER']
                    ]);
