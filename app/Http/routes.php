@@ -27,3 +27,5 @@ Route::post('api-routes/change-schedule-app',['as'=>'change-schedule-app','uses'
 Route::post('api-routes/create-schedule-app',['as'=>'create-schedule-app','uses'=>'ApplicationController@createScheduleApp']);
 Route::post('api-routes/all-locations-child',['as'=>'all-locations-child','uses'=>'ApplicationController@allLocationsChild']);
 
+Route::post('api-routes/store-parents',['as'=>'store-parents','uses'=>'ParentsController@storeParents']);
+

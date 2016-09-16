@@ -341,5 +341,6 @@ class ApplicationController extends Controller
         return response()->json($response);
         
         }
+        
     
 }
