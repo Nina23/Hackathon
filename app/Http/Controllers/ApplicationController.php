@@ -226,10 +226,12 @@ class ApplicationController extends Controller
            
             $counter=0;
             $schedule_list=[];
-            $schedule_app=  ScheduleApp::where('application',$app->id)->first();
-            if($schedule_app!=null){
+            $schedule_apps=  ScheduleApp::where('application',$app->id)->get();
+            if($schedule_apps!=null){
+            foreach($schedule_apps as $schedule_app){
                 $schedule_list[$counter]=['SCHEDULE_ID'=>$schedule_app->id,'DAY'=>$schedule_app->day,'TIME'=>$schedule_app->time,'INTERVAL'=>$schedule_app->interval];
                 $counter++;
+            }
             }
             
             
