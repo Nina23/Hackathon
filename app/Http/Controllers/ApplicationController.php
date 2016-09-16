@@ -10,8 +10,11 @@ use App\ScheduleApp;
 use App\ScheduleChild;
 use Illuminate\Http\Request;
 use App\Location;
+use App\Parents;
+use App\ParentsChild;
+use Validator;
 
-use App\Http\Requests;
+
 
 class ApplicationController extends Controller
 {
@@ -341,6 +344,109 @@ class ApplicationController extends Controller
         return response()->json($response);
         
         }
+        
+        public function storeChild(Request $request){
+            $rules = array(
+            'CHILD_PHONE'=>'required',
+            'NAME'=>'required',
+            'SURNAME'=>'required',
+            'PHONE'=>'required'
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['error'=>'validacija']);
+        }
+        
+        $parents=Parents::all();
+        $contition=0;
+        foreach($parents as $parent){
+            
+            if(strcmp($parent['number'], $request['PHONE'])===0){
+                
+                $contition=1;
+                $unique =  uniqid().'_'.uniqid();
+                $child_data=['unique_id'=>  $unique,
+                            'first_name'=>$request['NAME'],
+                            'last_name'=>$request['SURNAME'],
+                            'number'=>$request['CHILD_PHONE']];
+                
+                try{
+                    
+                    $child= Child::create($child_data);
+                    
+                    $parentChild_data=['parents'=>$parent->id,
+                                       'child'=>$child->id];
+                    try{
+                        $parentsChild=  ParentsChild::create($parentChild_data);
+                        $response=['SUCCESS'=>true,'CHILD_ID'=>$child->id,'UNIQUE_ID'=>$child->unique_id];
+                        return response()->json($response);
+                    }
+                    
+                    catch (\Exception $e) {
+                    $response=['SUCCESS'=>false];
+                    return response()->json($response);
+                        }
+                        
+                    }
+                catch (\Exception $e) {
+                    $response=['SUCCESS'=>false];
+                    return response()->json($response);
+                    }
+            } 
+        }
+        
+        if($contition==0){
+                $response=['SUCCESS'=>false];
+                return response()->json($response);
+        }
+      }
+      
+      
+      public function deleteScheduleApp(Request $request){
+           $rules = array(
+            'CHILD_ID'=>'required',
+            'APPLICATION'=>'required',
+            'SCHEDULE_ID'=>'required'
+            
+        );
+           
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['error'=>'validacija']);
+        }
+          
+          try {
+            $child = Child::findOrFail($request['CHILD_ID']);  
+        }
+        
+         catch (\Exception $e){
+            return response()->json(['error'=>'CHILD']);
+        }
+        
+        
+        try {
+            $application = Applications::where('id',$request['APPLICATION'])->where('child',$request['CHILD_ID'])->first();
+        }
+        
+         catch (\Exception $e){
+            return response()->json(['error'=>'Application does not exist']);
+        }
+        
+        
+        
+        $schedule_app=  ScheduleApp::where('id',$request['SCHEDULE_ID'])->where('application',$request['APPLICATION'])->first();
+         try {
+            ScheduleApp::destroy($schedule_app->id);
+            $response=['SUCCESS'=>true];
+            return response()->json($response);
+         }
+        
+         catch (\Exception $e){
+            return response()->json(['SUCCESS'=>false]);
+        }
+        
+      }
         
     
 }

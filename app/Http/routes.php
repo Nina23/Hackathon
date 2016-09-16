@@ -26,6 +26,9 @@ Route::post('api-routes/change-status-app',['as'=>'change-status-app','uses'=>'A
 Route::post('api-routes/change-schedule-app',['as'=>'change-schedule-app','uses'=>'ApplicationController@changeScheduleApp']);
 Route::post('api-routes/create-schedule-app',['as'=>'create-schedule-app','uses'=>'ApplicationController@createScheduleApp']);
 Route::post('api-routes/all-locations-child',['as'=>'all-locations-child','uses'=>'ApplicationController@allLocationsChild']);
+Route::post('api-routes/store-child',['as'=>'store-child','uses'=>'ApplicationController@storeChild']);
+Route::post('api-routes/delete-schedule-app',['as'=>'delete-schedule-app','uses'=>'ApplicationController@deleteScheduleApp']);
 
 Route::post('api-routes/store-parents',['as'=>'store-parents','uses'=>'ParentsController@storeParents']);
+Route::post('api-routes/login-parents',['as'=>'login-parents','uses'=>'ParentsController@loginParents']);
 
