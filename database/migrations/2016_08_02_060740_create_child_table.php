@@ -17,7 +17,7 @@ class CreateChildTable extends Migration
             $table->string('unique_id')->unique();
             $table->string('email');
             $table->string('password');
-            $table->string('number')->nullable();
+            $table->string('number')->unique();
             $table->string('address')->nullable();
             $table->string('first_name');
             $table->string('last_name');

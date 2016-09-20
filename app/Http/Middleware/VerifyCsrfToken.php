@@ -26,6 +26,7 @@ class VerifyCsrfToken extends BaseVerifier
         'api-routes/store-parents',
         'api-routes/store-child',
         'api-routes/login-parents',
-        'api-routes/delete-schedule-app'
+        'api-routes/delete-schedule-app',
+        'api-routes/deactivation'
     ];
 }

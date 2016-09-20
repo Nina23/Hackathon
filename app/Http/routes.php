@@ -31,4 +31,5 @@ Route::post('api-routes/delete-schedule-app',['as'=>'delete-schedule-app','uses'
 
 Route::post('api-routes/store-parents',['as'=>'store-parents','uses'=>'ParentsController@storeParents']);
 Route::post('api-routes/login-parents',['as'=>'login-parents','uses'=>'ParentsController@loginParents']);
+Route::post('api-routes/deactivation',['as'=>'deactivation','uses'=>'ParentsController@deactivation']);
 

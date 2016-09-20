@@ -29,7 +29,7 @@ class ParentsController extends Controller
 
        
         if($validator->fails()){
-            return response()->json(['ERROR_ID'=>8]);
+            return response()->json(['error'=>'validacija']);
         }
         
          $unique =  uniqid().'_'.uniqid();
@@ -50,7 +50,7 @@ class ParentsController extends Controller
         return response()->json($response);
          }
          catch (\Exception $e) {
-             $response=['SUCCESS'=>false,'ERROR_ID'=>1];
+             $response=['SUCCESS'=>false];
             return response()->json($response);
          }
     }
@@ -67,14 +67,14 @@ class ParentsController extends Controller
 
        
         if($validator->fails()){
-            return response()->json(['ERROR_ID'=>8]);
+            return response()->json(['error'=>'validacija']);
         }
         
        $parent=  Parents::where('email',$request['MAIL'])->first();
        
        if($parent==null)
        {
-            $response=['SUCCESS'=>false,'ERROR_ID'=>3];
+            $response=['SUCCESS'=>false];
             return response()->json($response);
        }
        
@@ -98,56 +98,9 @@ class ParentsController extends Controller
             return response()->json($response);
        }
        else{
-            $response=['SUCCESS'=>false,'ERROR_ID'=>4];
+            $response=['SUCCESS'=>false];
             return response()->json($response);
        }
-        
-    }
-    
-    
-    public function deactivation(Request $request){
-        $rules = array(
-            'CHILD_ID'=>'required',
-            'PARENT_ID'=>'required'
-            
-        );
-       // return print_r($request->all());
-         
-        $validator = Validator::make($request->all(),$rules);
-        if($validator->fails()){
-            return response()->json(['ERROR_ID'=>8]);
-        }
-        
-         try {
-            $child = Child::findOrFail($request['CHILD_ID']);  
-        }
-        
-         catch (\Exception $e){
-            return response()->json(['ERROR_ID'=>9]);
-        }
-        
-        
-         try {
-            $parent= Parents::findOrFail($request['PARENT_ID']);  
-        }
-        
-         catch (\Exception $e){
-            return response()->json(['ERROR_ID'=>13]);
-        }
-        
-        
-        
-        $parentChild= ParentsChild::where('child',$request['CHILD_ID'])->where('parents',$request['PARENT_ID'])->first();
-         if($parentChild!=null){   
-             ParentsChild::destroy($parentChild->id);
-             Parents::destroy($parent->id);
-             Child::destroy($child->id);     
-             $response=['SUCCESS'=>true];
-             return response()->json($response);
-        }
-        else{
-            return response()->json(['ERROR_ID'=>13]);
-        }
         
     }
 }

@@ -42,20 +42,26 @@ class ApplicationController extends Controller
        $counter_black=0;
 
        foreach($appliactions as $app){
-           if($app->status==1) {
-               $schedule_app=ScheduleApp::where('application',$app->id)->first();
-               if($schedule_app!=null)
-                    $white_list[$counter_white] = ['PACKAGE_NAME' => $app->name_of_package,'APPLICATION_NAME'=>$app->name_of_application,'DAY'=>$schedule_app->day,'INTERVAL'=>$schedule_app->interval,'TIME'=>$schedule_app->time];
-               else
-                    $white_list[$counter_white] = ['PACKAGE_NAME' => $app->name_of_package, 'APPLICATION_NAME'=>$app->name_of_application];
-                   
+           if(1==$app->status) {
+               $schedule_apps=ScheduleApp::where('application',$app->id)->get();
+                $schedule_list=[];
+                $counter_schedule=0;
+               foreach ($schedule_apps as $schedule_app){
+                  $schedule_list[$counter_schedule]= ['DAY'=>$schedule_app->day,'INTERVAL'=>$schedule_app->interval,'TIME'=>$schedule_app->time];
+              
+                   $counter_schedule++;
+              
+                   // $white_list[$counter_white] = ['PACKAGE_NAME' => $app->name_of_package, 'APPLICATION_NAME'=>$app->name_of_application];
+               }
+               $white_list[$counter_white]=['PACKAGE_NAME' => $app->name_of_package,'APPLICATION_NAME'=>$app->name_of_application,'APLICATION_SCHEDULE'=>$schedule_list];
+               $counter_white++;      
            }
-           if($app->status==2)
+           if(2==$app->status){
                $black_list[$counter_black]=['PACKAGE_NAME'=>$app->name_of_package,'APPLICATION_NAME'=>$app->name_of_application];
-           $counter_white++;
-           
-           $counter_black++;
+               $counter_black++;
+           }
        }
+       
        $response=["CHILD_ID"=>$request['CHILD_ID'],"APP_BLACKLIST"=>array_values($black_list),"APP_WHITELIST"=>array_values($white_list)];
        return response()->json($response);
 
@@ -83,18 +89,19 @@ class ApplicationController extends Controller
         }
        
         foreach ($request['APPLICATION_USAGE'] as $app_usage){
+            
             $app=  Applications::where('name_of_package',$app_usage['PACKAGE_NAME'])->where('child',$request['CHILD_ID'])->first();
-           // if($app==NULL){
-              // $new_app= Applications::create(['name_of_package'=>$instaled_app['PACKAGE_NAME'],'name_of_application'=>$instaled_app['APPLICATION_NAME']]);
-             //  UseApp::create(['application'=>$new_app['id'],'child'=>$request['CHILD_ID'],'interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$instaled_app['TIME']]);
-            //}
-            //else{
+            if($app==NULL){
+               $new_app= Applications::create(['name_of_package'=>$instaled_app['PACKAGE_NAME'],'name_of_application'=>$instaled_app['APPLICATION_NAME']]);
+               UseApp::create(['application'=>$new_app['id'],'child'=>$request['CHILD_ID'],'interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$instaled_app['TIME']]);
+            }
+            else{
                // $use_app=  UseApp::where('application',$app->id)->where('child',$request['CHILD_ID'])->first();
                 //if($schedule_app==null)
                UseApp::create(['application'=>$app['id'],'child'=>$request['CHILD_ID'],'interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$app_usage['DAY']]);
                // else
                    // $use_app->update(['interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$app_usage['TIME']]);
-           // }
+            }
         }
         
         return response()->json(['MESSAGE'=>201]);
@@ -357,7 +364,7 @@ class ApplicationController extends Controller
             
         $validator = Validator::make($request->all(),$rules);
         if($validator->fails()){
-            return response()->json(['error'=>'validacija']);
+            return response()->json(['ERROR_ID'=>8]);
         }
         
         $parents=Parents::all();
@@ -377,6 +384,9 @@ class ApplicationController extends Controller
                     
                     $child= Child::create($child_data);
                     
+                    $parent=ParentsChild::where('parents',$parent->id)->first();
+                    
+                    if($parent==null){
                     $parentChild_data=['parents'=>$parent->id,
                                        'child'=>$child->id];
                     try{
@@ -386,20 +396,27 @@ class ApplicationController extends Controller
                     }
                     
                     catch (\Exception $e) {
-                    $response=['SUCCESS'=>false];
+                    $response=['SUCCESS'=>false, 'ERROR_ID'=>12];
                     return response()->json($response);
                         }
+                    }
+                    else{
+                        $response=['SUCCESS'=>false,'ERROR_ID'=>7];
+                        return response()->json($response);
+                    }
+                        
+                        
                         
                     }
                 catch (\Exception $e) {
-                    $response=['SUCCESS'=>false];
+                    $response=['SUCCESS'=>false,'ERROR_ID'=>5];
                     return response()->json($response);
                     }
             } 
         }
         
         if($contition==0){
-                $response=['SUCCESS'=>false];
+                $response=['SUCCESS'=>false, 'ERROR_ID'=>6];
                 return response()->json($response);
         }
       }
@@ -415,7 +432,7 @@ class ApplicationController extends Controller
            
         $validator = Validator::make($request->all(),$rules);
         if($validator->fails()){
-            return response()->json(['error'=>'validacija']);
+            return response()->json(['ERROR_ID'=>8]);
         }
           
           try {
@@ -423,7 +440,7 @@ class ApplicationController extends Controller
         }
         
          catch (\Exception $e){
-            return response()->json(['error'=>'CHILD']);
+            return response()->json(['ERROR_ID'=>9]);
         }
         
         
@@ -432,7 +449,7 @@ class ApplicationController extends Controller
         }
         
          catch (\Exception $e){
-            return response()->json(['error'=>'Application does not exist']);
+            return response()->json(['ERROR_ID'=>10]);
         }
         
         
@@ -445,7 +462,7 @@ class ApplicationController extends Controller
          }
         
          catch (\Exception $e){
-            return response()->json(['SUCCESS'=>false]);
+            return response()->json(['SUCCESS'=>false, 'ERROR_ID'=>11]);
         }
         
       }
