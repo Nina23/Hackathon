@@ -388,7 +388,7 @@ class ApplicationController extends Controller
                     $child= Child::create($child_data);
                     
                     $parent=ParentsChild::where('parents',$parent->id)->first();
-                    
+                    return response()->json(['ERROR_ID'=>'nina']);
                     if($parent==""){
                     $parentChild_data=['parents'=>$parent->id,
                                        'child'=>$child->id];
