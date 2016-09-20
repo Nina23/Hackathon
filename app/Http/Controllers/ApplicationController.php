@@ -84,7 +84,7 @@ class ApplicationController extends Controller
             $used_app= Applications::where('name_of_package',$instaled_app['PACKAGE_NAME'])->where('child',$request['CHILD_ID'])->first();
             
             if($used_app==""){
-                 return response()->json(['MESSAGE'=>'ovde si']);
+                // return response()->json(['MESSAGE'=>'ovde si']);
                 Applications::create(['child'=>$request['CHILD_ID'],'name_of_package'=>$instaled_app['PACKAGE_NAME'],'name_of_application'=>$instaled_app['APPLICATION_NAME']]);
             }
             
