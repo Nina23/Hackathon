@@ -389,7 +389,7 @@ class ApplicationController extends Controller
                     
                     $parent=ParentsChild::where('parents',$parent->id)->first();
                     
-                    if($parent==null){
+                    if($parent==""){
                     $parentChild_data=['parents'=>$parent->id,
                                        'child'=>$child->id];
                     try{
