@@ -89,7 +89,7 @@ class ParentsController extends Controller
                $child=Child::where('id',$child_id->child)->first();
               
                if($child!=null){
-                   $list_children[$counter]=['CHILD_ID'=>$child->id,'UNIQUE_ID'=>$child->unique_id];
+                   $list_children[$counter]=['CHILD_ID'=>$child->id,'PARENT_ID'=>$parent->id,'UNIQUE_ID'=>$child->unique_id];
                    $counter++;
                   
                }

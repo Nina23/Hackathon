@@ -25,11 +25,21 @@ class ApplicationController extends Controller
 
 
    public function blackWhiteList(Request $request){
+        $rules = array(
+            'CHILD_ID'=>'required'
+           
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['ERROR_ID'=>8]);
+        }
+       
        try {
            $child = Child::findOrFail($request['CHILD_ID']);
        }
        catch (\Exception $e){
-           return response()->json(['error'=>'CHILD']);
+           return response()->json(['ERROR_ID'=>9]);
        }
 
        $appliactions=Applications::where('child',$request['CHILD_ID'])->get();
@@ -68,6 +78,17 @@ class ApplicationController extends Controller
    }
 
     public function appUsage(Request $request){
+        
+         $rules = array(
+            'CHILD_ID'=>'required'
+           
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['ERROR_ID'=>8]);
+        }
+        
       
         //$json_file= json_decode($request->all(),true);
         //return print_r($json);
@@ -77,7 +98,7 @@ class ApplicationController extends Controller
            
         }
         catch (\Exception $e){
-            return response()->json(['error'=>'CHILD']);
+            return response()->json(['ERROR_ID'=>9]);
         }
         
         foreach ($request["ALL_INSTALLED_APPLICATIONS"] as $instaled_app){
@@ -107,16 +128,28 @@ class ApplicationController extends Controller
             }
         }
         
-        return response()->json(['MESSAGE'=>201]);
+        return response()->json(['SUCCESS'=>true]);
         
     }
     
     public function netUsage(Request $request){
+         $rules = array(
+            'CHILD_ID'=>'required'
+           
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['ERROR_ID'=>8]);
+        }
+        
+        
+        
        try {
            $child = Child::findOrFail($request['CHILD_ID']);
        }
        catch (\Exception $e){
-           return response()->json(['error'=>'CHILD']);
+           return response()->json(['ERROR_ID'=>9]);
        }
 
        $net_usage= ScheduleNet::where('child',$request['CHILD_ID'])->get();
@@ -135,12 +168,25 @@ class ApplicationController extends Controller
        return response()->json($response);
 
    }
+   
+   
+   
     public function childSchedule(Request $request){
+        $rules = array(
+            'CHILD_ID'=>'required'   
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['ERROR_ID'=>8]);
+        }
+        
+        
         try {
            $child = Child::findOrFail($request['CHILD_ID']);
        }
        catch (\Exception $e){
-           return response()->json(['error'=>'CHILD']);
+           return response()->json(['ERROR_ID'=>9]);
        }
          
        
@@ -159,13 +205,21 @@ class ApplicationController extends Controller
    }
    
    public function saveLocation(Request $request){
+       $rules = array(
+            'CHILD_ID'=>'required'   
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['ERROR_ID'=>8]);
+        }
        
        
        try {
            $child = Child::findOrFail($request['CHILD_ID']);
        }
        catch (\Exception $e){
-           return response()->json(['error'=>'CHILD']);
+           return response()->json(['ERROR_ID'=>9]);
        }
        
       
@@ -193,11 +247,20 @@ class ApplicationController extends Controller
         return response()->json($response);
    }
    public function saveEvent(Request $request){
+       $rules = array(
+            'CHILD_ID'=>'required'   
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['ERROR_ID'=>8]);
+        }
+       
        try {
            $child = Child::findOrFail($request['CHILD_ID']);
        }
        catch (\Exception $e){
-           return response()->json(['error'=>'CHILD']);
+           return response()->json(['ERROR_ID'=>9]);
        }
        if($request['ACTION']==1){
            ScheduleChild::create(['child'=>$request['CHILD_ID'],'time'=>$request['TIME'],'note'=>$request['EVENT']]);
@@ -221,13 +284,20 @@ class ApplicationController extends Controller
    }
    
    public function allInstaledApp(Request $request){
-       //$request['CHILD_ID']=2;
+       $rules = array(
+            'CHILD_ID'=>'required'   
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['ERROR_ID'=>8]);
+        }
        try {
             $child = Child::findOrFail($request['CHILD_ID']);
            
         }
         catch (\Exception $e){
-            return response()->json(['error'=>'CHILD']);
+            return response()->json(['ERROR_ID'=>9]);
         }
         $applications = Applications::where('child',$request['CHILD_ID'])->get();
         $app_list=[];
@@ -271,13 +341,22 @@ class ApplicationController extends Controller
    }
    
    public function changeStatusApp(Request $request){
+       $rules = array(
+            'CHILD_ID'=>'required'   
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['ERROR_ID'=>8]);
+        }
+       
        
        try {
             $child = Child::findOrFail($request['CHILD_ID']);
            
         }
         catch (\Exception $e){
-            return response()->json(['error'=>'CHILD']);
+            return response()->json(['ERROR_ID'=>9]);
         }
         
         
@@ -289,7 +368,7 @@ class ApplicationController extends Controller
             $app->update(['status'=>$request['APPLICATIONS_STATUS']]);
         }
         else{
-            return response()->json(['error'=>'Application does not exists']);
+            return response()->json(['ERROR_ID'=>10]);
         }
         
         
@@ -299,12 +378,21 @@ class ApplicationController extends Controller
    }
    
    public function changeScheduleApp(Request $request){
+        $rules = array(
+            'CHILD_ID'=>'required'   
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['ERROR_ID'=>8]);
+        }
+       
        try {
             $child = Child::findOrFail($request['CHILD_ID']);
            
         }
         catch (\Exception $e){
-            return response()->json(['error'=>'CHILD']);
+            return response()->json(['ERROR_ID'=>9]);
         }
         
         $schedule_app= ScheduleApp::where('id',$request['SCHEDULE_ID'])->where('application',$request['APPLICATION'])->first();
@@ -320,12 +408,22 @@ class ApplicationController extends Controller
    }
    
    public function createScheduleApp(Request $request){
+        $rules = array(
+            'CHILD_ID'=>'required'   
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['ERROR_ID'=>8]);
+        }
+       
+       
        try {
             $child = Child::findOrFail($request['CHILD_ID']);
            
         }
         catch (\Exception $e){
-            return response()->json(['error'=>'CHILD']);
+            return response()->json(['ERROR_ID'=>9]);
         }
          //return response()->json(['nina'=>true]);
      
@@ -337,12 +435,20 @@ class ApplicationController extends Controller
         }
         
         public function allLocationsChild(Request $request){
+             $rules = array(
+            'CHILD_ID'=>'required'   
+        );
+            
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['ERROR_ID'=>8]);
+        }
             try {
             $child = Child::findOrFail($request['CHILD_ID']);
            
         }
         catch (\Exception $e){
-            return response()->json(['error'=>'CHILD']);
+            return response()->json(['ERROR_ID'=>9]);
         }
         $locations=  Location::where('child',$request['CHILD_ID'])->orderBy('time_of_location', 'desc')->get();
         $counter=0;
