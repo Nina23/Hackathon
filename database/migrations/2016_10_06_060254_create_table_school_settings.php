@@ -15,8 +15,8 @@ class CreateTableSchoolSettings extends Migration
         Schema::create('school_settings', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('child');
-            $table->tinyInteger('school_state');
-            $table->tinyInteger('week_switch');
+            $table->integer('school_state')->default(1);
+            $table->integer('week_switch')->default(1);
             $table->timestamps();
         });
     }
