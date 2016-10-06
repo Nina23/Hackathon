@@ -28,6 +28,8 @@ Route::post('api-routes/create-schedule-app',['as'=>'create-schedule-app','uses'
 Route::post('api-routes/all-locations-child',['as'=>'all-locations-child','uses'=>'ApplicationController@allLocationsChild']);
 Route::post('api-routes/store-child',['as'=>'store-child','uses'=>'ApplicationController@storeChild']);
 Route::post('api-routes/delete-schedule-app',['as'=>'delete-schedule-app','uses'=>'ApplicationController@deleteScheduleApp']);
+Route::post('api-routes/create-school-settings',['as'=>'create-school-settings','uses'=>'ApplicationController@createSchoolSettings']);
+
 
 Route::post('api-routes/store-parents',['as'=>'store-parents','uses'=>'ParentsController@storeParents']);
 Route::post('api-routes/login-parents',['as'=>'login-parents','uses'=>'ParentsController@loginParents']);

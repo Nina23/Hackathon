@@ -17,6 +17,13 @@ class CreateScheduleChildTable extends Migration
             $table->integer('child');
             $table->timestamp('time');
             $table->string('note');
+            $table->timestamp('end_time');
+            $table->integer('event_type');
+            $table->integer('notification_type')->default(1)->nullable();
+            $table->integer('notification_time')->default(30)->nullable();
+            $table->integer('event_shift')->default(0)->nullable();
+            $table->integer('event_repeat')->default(1)->nullable();
+            $table->boolean('event_all_day')->default(false)->nullable();
             $table->timestamps();
         });
     }
