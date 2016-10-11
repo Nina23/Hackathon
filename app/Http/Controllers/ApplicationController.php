@@ -186,19 +186,18 @@ class ApplicationController extends Controller {
                 'EVENT_SHIFT' => $shedule['event_shift'],
                 'EVENT_REPEAT' => $shedule['event_repeat'],
                 'EVENT_ALL_DAY' => $shedule['event_all_day'],
-                    
-                    ];
+            ];
             $counter++;
         }
-        $school_settings=  SchoolSettings::where('child',$request['CHILD_ID'])->first();
-        
-        if($school_settings==null){
-            $school_settings['school_state']="";
-            $school_settings['week_switch']="";
+        $school_settings = SchoolSettings::where('child', $request['CHILD_ID'])->first();
+
+        if ($school_settings == null) {
+            $school_settings['school_state'] = "";
+            $school_settings['week_switch'] = "";
         }
-        $response = ["CHILD_ID" => $request['CHILD_ID'], 
-            "SCHOOL_STATE"=>$school_settings['school_state'],
-            "WEEK_SWITCH"=>$school_settings['week_switch'],
+        $response = ["CHILD_ID" => $request['CHILD_ID'],
+            "SCHOOL_STATE" => $school_settings['school_state'],
+            "WEEK_SWITCH" => $school_settings['week_switch'],
             "EVENTS_SCHEDULE" => array_values($event_list)];
         return response()->json($response);
     }
@@ -246,6 +245,8 @@ class ApplicationController extends Controller {
     }
 
     public function saveEvent(Request $request) {
+
+        //return print_r($request->all());
         $rules = array(
             'CHILD_ID' => 'required'
         );
@@ -262,22 +263,23 @@ class ApplicationController extends Controller {
         }
 
 
-        if (!array_key_exists('NOTIFICATION_TYPE', $request))
-            $request['NOTIFICATION_TYPE'] = "";
 
-        if (!array_key_exists('NOTIFICATION_TIME', $request))
-            $request['NOTIFICATION_TIME'] = "";
+        if (!array_key_exists('NOTIFICATION_TYPE', $request->all())) {
 
-        if (!array_key_exists('EVENT_SHIFT', $request))
-            $request['EVENT_SHIFT'] = "";
+            $request['NOTIFICATION_TYPE'] = 1;
+        }
 
-        if (!array_key_exists('EVENT_REPEAT', $request))
-            $request['EVENT_REPEAT'] = "";
+        if (!array_key_exists('NOTIFICATION_TIME', $request->all()))
+            $request['NOTIFICATION_TIME'] = 30;
 
-        if (!array_key_exists('EVENT_ALL_DAY', $request))
-            $request['EVENT_ALL_DAY'] = "";
+        if (!array_key_exists('EVENT_SHIFT', $request->all()))
+            $request['EVENT_SHIFT'] = 0;
 
+        if (!array_key_exists('EVENT_REPEAT', $request->all()))
+            $request['EVENT_REPEAT'] = 1;
 
+        if (!array_key_exists('EVENT_ALL_DAY', $request->all()))
+            $request['EVENT_ALL_DAY'] = false;
 
         if ($request['ACTION'] == 1) {
             ScheduleChild::create(['child' => $request['CHILD_ID'],
