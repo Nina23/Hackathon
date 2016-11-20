@@ -502,9 +502,7 @@ class ApplicationController extends Controller {
                     'first_name' => $request['NAME'],
                     'last_name' => $request['SURNAME'],
                     'number' => $request['CHILD_PHONE']];
-
                 try {
-
                     $child = Child::create($child_data);
 
                     $parent_find = ParentsChild::where('parents', $parent->id)->first();
@@ -515,8 +513,31 @@ class ApplicationController extends Controller {
                             'child' => $child->id];
                         try {
                             $parentsChild = ParentsChild::create($parentChild_data);
-                            $response = ['SUCCESS' => true, 'CHILD_ID' => $child->id, 'UNIQUE_ID' => $child->unique_id];
-                            return response()->json($response);
+                            $child_response = [
+                                'CHILD_ID' => $child->id,
+                                'UNIQUE_ID' => $child->unique_id,
+                                'PHONE' => $child->number,
+                                'ADDRESS' => $child->address,
+                                'NAME' => $child->first_name,
+                                'SURNAME' => $child->last_name,
+                                'IMAGE' => $child->image,
+                                'STATUS' => $child->status,
+                                'SEX' => $child->sex
+                            ];
+                            $parent_response = [
+                                'PARENT_ID' => $parent->id,
+                                'UNIQUE_ID' => $parent->unique_id,
+                                'NAME' => $parent->first_name,
+                                'SURNAME' => $parent->last_name,
+                                'MAIL' => $parent['email'],
+                                'PHONE' => $parent['number'],
+                                'ADDRESS' => $parent['address'],
+                                'IMAGE' => $parent['image'],
+                                'STATUS' => $parent['status'],
+                                'ACTIVATED' => $parent['activated'],
+                                'FRENDINO_PRO' => $parent['frendino_pro'],
+                            ];
+                            return response()->json(['SUCCESS' => true,'CHILD'=>array_values($child_response),'PARENT'=>array_values($parent_response)]);
                         } catch (\Exception $e) {
                             $response = ['SUCCESS' => false, 'ERROR_ID' => 12];
                             return response()->json($response);

@@ -84,31 +84,31 @@ class ParentsController extends Controller {
 
                 if ($child != null) {
                     $list_children[$counter] = ['CHILD_ID' => $child->id,
-                        'UNIQUE_ID'=>$child['unique_id'],
-                        'PHONE'=>$child['number'],
-                        'ADDRESS'=>$child['address'],
-                        'NAME'=>$child['first_name'],
-                        'SURNAME'=>$child['last_name'],
-                        'IMAGE'=>$child['image'],
-                        'STATUS'=>$child['status'],
-                        'SEX'=>$child['sex']
-                        ];
+                        'UNIQUE_ID' => $child['unique_id'],
+                        'PHONE' => $child['number'],
+                        'ADDRESS' => $child['address'],
+                        'NAME' => $child['first_name'],
+                        'SURNAME' => $child['last_name'],
+                        'IMAGE' => $child['image'],
+                        'STATUS' => $child['status'],
+                        'SEX' => $child['sex']
+                    ];
                     $counter++;
                 }
             }
             $response = [
                 'SUCCESS' => true,
-                'PARENT_ID'=>$parent['id'],
-                'UNIQUE_ID'=>$parent['unique_id'],
-                'NAME'=>$parent['first_name'],
-                'SURNAME'=>$parent['last_name'],
-                'MAIL'=>$parent['email'],
-                'PHONE'=>$parent['number'],
-                'ADDRESS'=>$parent['address'],
-                'IMAGE'=>$parent['image'],
-                'STATUS'=>$parent['status'],
-                'ACTIVATED'=>$parent['activated'],
-                'FRENDINO_PRO'=>$parent['frendino_pro'],
+                'PARENT_ID' => $parent['id'],
+                'UNIQUE_ID' => $parent['unique_id'],
+                'NAME' => $parent['first_name'],
+                'SURNAME' => $parent['last_name'],
+                'MAIL' => $parent['email'],
+                'PHONE' => $parent['number'],
+                'ADDRESS' => $parent['address'],
+                'IMAGE' => $parent['image'],
+                'STATUS' => $parent['status'],
+                'ACTIVATED' => $parent['activated'],
+                'FRENDINO_PRO' => $parent['frendino_pro'],
                 'CHILDREN' => array_values($list_children)];
 
 
@@ -157,6 +157,29 @@ class ParentsController extends Controller {
         } else {
             return response()->json(['ERROR_ID' => 13]);
         }
+    }
+
+    public function activateFrendinoPro(Request $request) {
+        $rules = array(
+            'UNIQUE_ID' => 'required',
+            'FRENDINO_PRO' => 'required'
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['ERROR_ID' => 8]);
+        }
+
+
+        $parent = Parents::where('unique_id', $request['UNIQUE_ID'])->first();
+        if ($parent == null) {
+            $response = ['SUCCESS' => false, 'ERROR_ID' => 3];
+            return response()->json($response);
+        }
+
+        $parent->update([['frendino_pro' => $request['FRENDINO_PRO']]]);
+        $response = ['SUCCESS' => true];
+        return response()->json($response);
     }
 
 }

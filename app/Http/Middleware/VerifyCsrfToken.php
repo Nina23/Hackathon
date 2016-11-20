@@ -29,6 +29,7 @@ class VerifyCsrfToken extends BaseVerifier
         'api-routes/delete-schedule-app',
         'api-routes/deactivation',
         'api-routes/create-school-settings',
-        'api-routes/create-save-event'
+        'api-routes/create-save-event',
+        'api-routes/activate-frendino-pro'
     ];
 }

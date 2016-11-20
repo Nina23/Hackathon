@@ -34,4 +34,5 @@ Route::post('api-routes/create-school-settings',['as'=>'create-school-settings',
 Route::post('api-routes/store-parents',['as'=>'store-parents','uses'=>'ParentsController@storeParents']);
 Route::post('api-routes/login-parents',['as'=>'login-parents','uses'=>'ParentsController@loginParents']);
 Route::post('api-routes/deactivation',['as'=>'deactivation','uses'=>'ParentsController@deactivation']);
+Route::post('api-routes/activate-frendino-pro',['as'=>'activate-frendino-pro','uses'=>'ParentsController@activateFrendinoPro']);
 
