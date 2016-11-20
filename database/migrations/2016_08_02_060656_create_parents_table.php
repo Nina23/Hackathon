@@ -23,6 +23,8 @@ class CreateParentsTable extends Migration
             $table->string('last_name');
             $table->string('image')->nullable();
             $table->tinyInteger('status')->nullable();
+            $table->integer('activated')->default(2);
+            $table->integer('frendino_pro')->default(1);
             $table->timestamps();
         });
     }
