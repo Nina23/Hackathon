@@ -20,9 +20,12 @@ class ApplicationController extends Controller {
      * Api for return black and white list and use application from white list
      * */
 
+
+
     public function blackWhiteList(Request $request) {
         $rules = array(
-            'CHILD_ID' => 'required'
+            'CHILD_ID' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -30,9 +33,12 @@ class ApplicationController extends Controller {
             return response()->json(['ERROR_ID' => 8]);
         }
 
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
 
@@ -73,7 +79,9 @@ class ApplicationController extends Controller {
     public function appUsage(Request $request) {
 
         $rules = array(
-            'CHILD_ID' => 'required'
+            'CHILD_ID' => 'required',
+            'TOKEN' => 'required'
+            
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -82,12 +90,12 @@ class ApplicationController extends Controller {
         }
 
 
-        //$json_file= json_decode($request->all(),true);
-        //return print_r($json);
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
 
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
 
@@ -121,7 +129,8 @@ class ApplicationController extends Controller {
 
     public function netUsage(Request $request) {
         $rules = array(
-            'CHILD_ID' => 'required'
+            'CHILD_ID' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -131,9 +140,12 @@ class ApplicationController extends Controller {
 
 
 
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
 
@@ -154,7 +166,8 @@ class ApplicationController extends Controller {
 
     public function childSchedule(Request $request) {
         $rules = array(
-            'CHILD_ID' => 'required'
+            'CHILD_ID' => 'required',
+            'TOKEN'=>'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -163,9 +176,12 @@ class ApplicationController extends Controller {
         }
 
 
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
 
@@ -204,7 +220,8 @@ class ApplicationController extends Controller {
 
     public function saveLocation(Request $request) {
         $rules = array(
-            'CHILD_ID' => 'required'
+            'CHILD_ID' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -213,12 +230,14 @@ class ApplicationController extends Controller {
         }
 
 
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
-            return response()->json(['ERROR_ID' => 9]);
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
         }
 
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
+            return response()->json(['ERROR_ID' => 9]);
+        }
 
 
 
@@ -248,7 +267,8 @@ class ApplicationController extends Controller {
 
         //return print_r($request->all());
         $rules = array(
-            'CHILD_ID' => 'required'
+            'CHILD_ID' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -256,9 +276,12 @@ class ApplicationController extends Controller {
             return response()->json(['ERROR_ID' => 8]);
         }
 
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
 
@@ -318,16 +341,20 @@ class ApplicationController extends Controller {
 
     public function allInstaledApp(Request $request) {
         $rules = array(
-            'CHILD_ID' => 'required'
+            'CHILD_ID' => 'required',
+            'TOKEN'=>'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json(['ERROR_ID' => 8]);
         }
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
         $applications = Applications::where('child', $request['CHILD_ID'])->get();
@@ -369,7 +396,8 @@ class ApplicationController extends Controller {
 
     public function changeStatusApp(Request $request) {
         $rules = array(
-            'CHILD_ID' => 'required'
+            'CHILD_ID' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -378,9 +406,12 @@ class ApplicationController extends Controller {
         }
 
 
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
 
@@ -402,7 +433,8 @@ class ApplicationController extends Controller {
 
     public function changeScheduleApp(Request $request) {
         $rules = array(
-            'CHILD_ID' => 'required'
+            'CHILD_ID' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -410,9 +442,12 @@ class ApplicationController extends Controller {
             return response()->json(['ERROR_ID' => 8]);
         }
 
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
 
@@ -429,7 +464,8 @@ class ApplicationController extends Controller {
 
     public function createScheduleApp(Request $request) {
         $rules = array(
-            'CHILD_ID' => 'required'
+            'CHILD_ID' => 'required',
+            'TOKEN'=>'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -438,12 +474,14 @@ class ApplicationController extends Controller {
         }
 
 
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
-        //return response()->json(['nina'=>true]);
 
         $schedule_app = ScheduleApp::create(['child' => $request['CHILD_ID'], 'application' => $request['APPLICATION_ID'], 'day' => $request['DAY'], 'time' => $request['TIME'], 'interval' => $request['INTERVAL']]);
 
@@ -453,16 +491,20 @@ class ApplicationController extends Controller {
 
     public function allLocationsChild(Request $request) {
         $rules = array(
-            'CHILD_ID' => 'required'
+            'CHILD_ID' => 'required',
+            'TOKEN'=>'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json(['ERROR_ID' => 8]);
         }
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
         $locations = Location::where('child', $request['CHILD_ID'])->orderBy('time_of_location', 'desc')->get();
@@ -482,13 +524,19 @@ class ApplicationController extends Controller {
             'CHILD_PHONE' => 'required',
             'NAME' => 'required',
             'SURNAME' => 'required',
-            'PHONE' => 'required'
+            'PHONE' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json(['ERROR_ID' => 8]);
         }
+        
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+        
 
         $parents = Parents::all();
         $contition = 0;
@@ -537,7 +585,7 @@ class ApplicationController extends Controller {
                                 'ACTIVATED' => $parent['activated'],
                                 'FRENDINO_PRO' => $parent['frendino_pro'],
                             ];
-                            return response()->json(['SUCCESS' => true,'CHILD'=>array_values($child_response),'PARENT'=>array_values($parent_response)]);
+                            return response()->json(['SUCCESS' => true, 'CHILD' => array_values($child_response), 'PARENT' => array_values($parent_response)]);
                         } catch (\Exception $e) {
                             $response = ['SUCCESS' => false, 'ERROR_ID' => 12];
                             return response()->json($response);
@@ -563,7 +611,8 @@ class ApplicationController extends Controller {
         $rules = array(
             'CHILD_ID' => 'required',
             'APPLICATION' => 'required',
-            'SCHEDULE_ID' => 'required'
+            'SCHEDULE_ID' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -571,9 +620,12 @@ class ApplicationController extends Controller {
             return response()->json(['ERROR_ID' => 8]);
         }
 
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
 
@@ -601,7 +653,8 @@ class ApplicationController extends Controller {
         $rules = array(
             'CHILD_ID' => 'required',
             'SCHOOL_STATE' => 'required',
-            'WEEK_SWITCH' => 'required'
+            'WEEK_SWITCH' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -609,9 +662,12 @@ class ApplicationController extends Controller {
             return response()->json(['ERROR_ID' => 8]);
         }
 
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $child = Child::where('unique_id', $request['CHILD_ID'])->first();
+        if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
 

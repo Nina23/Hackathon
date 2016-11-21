@@ -30,6 +30,8 @@ class VerifyCsrfToken extends BaseVerifier
         'api-routes/deactivation',
         'api-routes/create-school-settings',
         'api-routes/create-save-event',
-        'api-routes/activate-frendino-pro'
+        'api-routes/activate-frendino-pro',
+        'api-routes/get-reset-password',
+        'api-routes/change-password'
     ];
 }

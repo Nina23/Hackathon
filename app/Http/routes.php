@@ -35,4 +35,6 @@ Route::post('api-routes/store-parents',['as'=>'store-parents','uses'=>'ParentsCo
 Route::post('api-routes/login-parents',['as'=>'login-parents','uses'=>'ParentsController@loginParents']);
 Route::post('api-routes/deactivation',['as'=>'deactivation','uses'=>'ParentsController@deactivation']);
 Route::post('api-routes/activate-frendino-pro',['as'=>'activate-frendino-pro','uses'=>'ParentsController@activateFrendinoPro']);
+Route::post('api-routes/get-reset-password',['as'=>'get-reset-password','uses'=>'ParentsController@getResetPassword']);
+Route::post('api-routes/change-password',['as'=>'change-password','uses'=>'ParentsController@changePassword']);
 

@@ -8,6 +8,9 @@ use Validator;
 use Hash;
 use App\ParentsChild;
 use App\Child;
+use App\ResetPass;
+use Mail;
+use DB;
 
 class ParentsController extends Controller {
 
@@ -20,7 +23,8 @@ class ParentsController extends Controller {
             'PASSWORD' => 'required',
             'NAME' => 'required',
             'SURNAME' => 'required',
-            'PHONE' => 'required'
+            'PHONE' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -29,7 +33,12 @@ class ParentsController extends Controller {
         if ($validator->fails()) {
             return response()->json(['ERROR_ID' => 8]);
         }
+        
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
 
+       
         $unique = uniqid() . '_' . uniqid();
 
         $parent_data = ['unique_id' => $unique,
@@ -55,7 +64,8 @@ class ParentsController extends Controller {
     public function loginParents(Request $request) {
         $rules = array(
             'MAIL' => 'email|required',
-            'PASSWORD' => 'required'
+            'PASSWORD' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -64,6 +74,11 @@ class ParentsController extends Controller {
         if ($validator->fails()) {
             return response()->json(['ERROR_ID' => 8]);
         }
+        
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
 
         $parent = Parents::where('email', $request['MAIL'])->first();
 
@@ -122,8 +137,11 @@ class ParentsController extends Controller {
 
     public function deactivation(Request $request) {
         $rules = array(
-            'CHILD_ID' => 'required',
-            'PARENT_ID' => 'required'
+            'MAIL' => 'required|email',
+            'PARENT_ID' => 'required',
+            'ACTIVATED' => 'required',
+            'TOKEN' => 'required'
+
         );
         // return print_r($request->all());
 
@@ -131,27 +149,24 @@ class ParentsController extends Controller {
         if ($validator->fails()) {
             return response()->json(['ERROR_ID' => 8]);
         }
-
-        try {
-            $child = Child::findOrFail($request['CHILD_ID']);
-        } catch (\Exception $e) {
-            return response()->json(['ERROR_ID' => 9]);
+        
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
         }
 
 
         try {
-            $parent = Parents::findOrFail($request['PARENT_ID']);
+            $parent = Parents::where('unique_id', $request['PARENT_ID'])->where('email', $request['MAIL'])->first();
         } catch (\Exception $e) {
             return response()->json(['ERROR_ID' => 13]);
         }
+        if ($parent != null) {
 
-
-
-        $parentChild = ParentsChild::where('child', $request['CHILD_ID'])->where('parents', $request['PARENT_ID'])->first();
-        if ($parentChild != null) {
-            ParentsChild::destroy($parentChild->id);
-            Parents::destroy($parent->id);
-            Child::destroy($child->id);
+            if ($parent->activated == 2) {
+                $response = ['ERORR_ID' => 14];
+                return response()->json($response);
+            }
+            $parent->update(['activated' => intval($request['ACTIVATED'])]);
             $response = ['SUCCESS' => true];
             return response()->json($response);
         } else {
@@ -162,12 +177,16 @@ class ParentsController extends Controller {
     public function activateFrendinoPro(Request $request) {
         $rules = array(
             'UNIQUE_ID' => 'required',
-            'FRENDINO_PRO' => 'required'
+            'FRENDINO_PRO' => 'required',
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json(['ERROR_ID' => 8]);
+        }
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
         }
 
 
@@ -180,6 +199,84 @@ class ParentsController extends Controller {
         $parent->update([['frendino_pro' => $request['FRENDINO_PRO']]]);
         $response = ['SUCCESS' => true];
         return response()->json($response);
+    }
+
+    public function getResetPassword(Request $request) {
+
+        $rules = array(
+            'MAIL' => 'required|email',
+            'TOKEN'=>'required'
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['ERROR_ID' => 8]);
+        }
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $parent = Parents::where('email', $request['MAIL'])->first();
+
+        if ($parent != null) {
+
+            $token = str_random(64);
+
+            ResetPass::create(['email' => $request['MAIL'], 'token' => $token]);
+
+            $data['token'] = $token;
+            $data['email'] = $request['MAIL'];
+
+            $niz = [
+                'data' => $data
+            ];
+            $user = ['email' => $request['MAIL']];
+            Mail::send('user.resset_password', $niz, function ($m) use ($user) {
+                $m->from('info@frendino.com', 'Frendino');
+                $m->to($user['email'], '');
+                $m->subject('Token for resset password');
+            });
+            $response = ['SUCCESS' => true];
+            return response()->json($response);
+        } else {
+            $response = ['SUCCESS' => false];
+            return response()->json($response);
+        }
+    }
+
+    public function changePassword(Request $request) {
+        $rules = array(
+            'MAIL' => 'required|email',
+            'TEMP_PASS' => 'required',
+            'PASSWORD' => 'required',
+            'TOKEN' => 'required'
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['ERROR_ID' => 8]);
+        }
+        if (config('token.token') != $request['TOKEN']) {
+            return response()->json(['ERORR_ID' => 15]);
+        }
+
+        $parent = Parents::where('email', $request['MAIL'])->first();
+
+        if ($parent != null) {
+            $reset_pass = ResetPass::where('token', $request['TEMP_PASS'])->where('email', $request['MAIL'])->first();
+            if ($reset_pass != null) {
+                $parent->update(['password' => bcrypt($request['PASSWORD'])]);
+                DB::table('password_resets')->where('token', $request['TEMP_PASS'])->delete();
+                $response = ['SUCCESS' => true];
+                return response()->json($response);
+            } else {
+                $response = ['SUCCESS' => false];
+                return response()->json($response);
+            }
+        } else {
+            $response = ['ERROR_ID' => 13];
+            return response()->json($response);
+        }
     }
 
 }
