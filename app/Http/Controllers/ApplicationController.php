@@ -507,7 +507,7 @@ class ApplicationController extends Controller {
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
-        $locations = Location::where('child', $request['CHILD_ID'])->orderBy('time_of_location', 'desc')->get();
+        $locations = Location::where('child', $child->id)->orderBy('time_of_location', 'desc')->get();
         $counter = 0;
         $locations_list = [];
         foreach ($locations as $location) {

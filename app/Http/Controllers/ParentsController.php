@@ -154,7 +154,6 @@ class ParentsController extends Controller {
             return response()->json(['ERORR_ID' => 15]);
         }
 
-
         try {
             $parent = Parents::where('unique_id', $request['PARENT_ID'])->where('email', $request['MAIL'])->first();
         } catch (\Exception $e) {
@@ -162,10 +161,6 @@ class ParentsController extends Controller {
         }
         if ($parent != null) {
 
-            if ($parent->activated == 2) {
-                $response = ['ERORR_ID' => 14];
-                return response()->json($response);
-            }
             $parent->update(['activated' => intval($request['ACTIVATED'])]);
             $response = ['SUCCESS' => true];
             return response()->json($response);
