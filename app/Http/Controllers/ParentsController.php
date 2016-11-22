@@ -191,7 +191,7 @@ class ParentsController extends Controller {
             return response()->json($response);
         }
 
-        $parent->update([['frendino_pro' => $request['FRENDINO_PRO']]]);
+        $parent->update(['frendino_pro' => $request['FRENDINO_PRO']]);
         $response = ['SUCCESS' => true];
         return response()->json($response);
     }
