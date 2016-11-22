@@ -20,8 +20,6 @@ class ApplicationController extends Controller {
      * Api for return black and white list and use application from white list
      * */
 
-
-
     public function blackWhiteList(Request $request) {
         $rules = array(
             'CHILD_ID' => 'required',
@@ -36,12 +34,25 @@ class ApplicationController extends Controller {
         if (config('token.token') != $request['TOKEN']) {
             return response()->json(['ERORR_ID' => 15]);
         }
-        
-        
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
+        }
+
+        $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
         }
 
         $appliactions = Applications::where('child', $child->id)->get();
@@ -82,7 +93,6 @@ class ApplicationController extends Controller {
         $rules = array(
             'CHILD_ID' => 'required',
             'TOKEN' => 'required'
-            
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -99,6 +109,23 @@ class ApplicationController extends Controller {
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
+
+
+        $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
+        }
+
 
         foreach ($request["ALL_INSTALLED_APPLICATIONS"] as $instaled_app) {
             $used_app = Applications::where('name_of_package', $instaled_app['PACKAGE_NAME'])->where('child', $child->id)->first();
@@ -119,7 +146,6 @@ class ApplicationController extends Controller {
             } else {
 
                 UseApp::create(['application' => $app['id'], 'child' => $child->id, 'interval' => $app_usage['INTERVAL'], 'time_of_creation' => $app_usage['DAY']]);
-
             }
         }
 
@@ -148,6 +174,22 @@ class ApplicationController extends Controller {
             return response()->json(['ERROR_ID' => 9]);
         }
 
+        $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
+        }
+
+
         $net_usage = ScheduleNet::where('child', $child->id)->get();
         $counter = 0;
         $net_list = [];
@@ -166,7 +208,7 @@ class ApplicationController extends Controller {
     public function childSchedule(Request $request) {
         $rules = array(
             'CHILD_ID' => 'required',
-            'TOKEN'=>'required'
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -182,6 +224,21 @@ class ApplicationController extends Controller {
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
+        }
+        
+         $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
         }
 
 
@@ -237,6 +294,20 @@ class ApplicationController extends Controller {
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
+         $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
+        }
 
 
 
@@ -283,6 +354,22 @@ class ApplicationController extends Controller {
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
+        
+        
+         $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
+        }
 
 
 
@@ -316,7 +403,7 @@ class ApplicationController extends Controller {
                 'event_all_day' => $request['EVENT_ALL_DAY']
             ]);
         } elseif ($request['ACTION'] == 2) {
-            $shedule_child = ScheduleChild::where('id', $request['EVENT_ID'])->where('child',$child->id)->first();
+            $shedule_child = ScheduleChild::where('id', $request['EVENT_ID'])->where('child', $child->id)->first();
             $shedule_child->update(['time' => $request['TIME'],
                 'note' => $request['EVENT'],
                 'end_time' => $request['END_TIME'],
@@ -341,7 +428,7 @@ class ApplicationController extends Controller {
     public function allInstaledApp(Request $request) {
         $rules = array(
             'CHILD_ID' => 'required',
-            'TOKEN'=>'required'
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -356,6 +443,23 @@ class ApplicationController extends Controller {
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
+        
+         $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
+        }
+        
+        
         $applications = Applications::where('child', $child->id)->get();
         $app_list = [];
         $counter_all_app = 0;
@@ -413,6 +517,21 @@ class ApplicationController extends Controller {
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
+        
+         $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
+        }
 
 
 
@@ -449,6 +568,21 @@ class ApplicationController extends Controller {
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
+        
+         $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
+        }
 
         $schedule_app = ScheduleApp::where('id', $request['SCHEDULE_ID'])->where('application', $request['APPLICATION'])->first();
         if ($schedule_app != null) {
@@ -464,7 +598,7 @@ class ApplicationController extends Controller {
     public function createScheduleApp(Request $request) {
         $rules = array(
             'CHILD_ID' => 'required',
-            'TOKEN'=>'required'
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -481,8 +615,24 @@ class ApplicationController extends Controller {
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
+        
+         $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
 
-        $schedule_app = ScheduleApp::create(['child' =>$child->id, 'application' => $request['APPLICATION_ID'], 'day' => $request['DAY'], 'time' => $request['TIME'], 'interval' => $request['INTERVAL']]);
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
+        }
+        
+
+        $schedule_app = ScheduleApp::create(['child' => $child->id, 'application' => $request['APPLICATION_ID'], 'day' => $request['DAY'], 'time' => $request['TIME'], 'interval' => $request['INTERVAL']]);
 
         $response = ['APPLICATION_ID' => $schedule_app['application'], 'SCHEDULE_ID' => $schedule_app['id'], 'DAY' => $schedule_app['day'], 'INTERVAL' => $schedule_app['interval'], 'TIME' => $schedule_app['time']];
         return response()->json($response);
@@ -491,7 +641,7 @@ class ApplicationController extends Controller {
     public function allLocationsChild(Request $request) {
         $rules = array(
             'CHILD_ID' => 'required',
-            'TOKEN'=>'required'
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -505,6 +655,21 @@ class ApplicationController extends Controller {
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
+        }
+        
+        $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
         }
         $locations = Location::where('child', $child->id)->orderBy('time_of_location', 'desc')->get();
         $counter = 0;
@@ -531,11 +696,11 @@ class ApplicationController extends Controller {
         if ($validator->fails()) {
             return response()->json(['ERROR_ID' => 8]);
         }
-        
+
         if (config('token.token') != $request['TOKEN']) {
             return response()->json(['ERORR_ID' => 15]);
         }
-        
+
 
         $parents = Parents::all();
         $contition = 0;
@@ -553,6 +718,10 @@ class ApplicationController extends Controller {
                     $child = Child::create($child_data);
 
                     $parent_find = ParentsChild::where('parents', $parent->id)->first();
+                    
+                    if($parent_find->activated==1){
+                        return response()->json(['ERORR_ID' => 14]);
+                    }
 
                     if ($parent_find == "") {
 
@@ -627,6 +796,21 @@ class ApplicationController extends Controller {
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
+        
+         $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
+        }
 
 
         try {
@@ -668,6 +852,21 @@ class ApplicationController extends Controller {
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
+        }
+        
+         $parentsChild = ParentsChild::where('child', $child->id)->first();
+        if ($parentsChild == null) {
+            return response()->json(['ERROR_ID' => 12]);
+        }
+
+        $parent = Parents::where('id', $parentsChild->parents)->first();
+
+        if ($parent == null) {
+            return response()->json(['ERROR_ID' => 13]);
+        }
+
+        if ($parent->activated == 1) {
+            return response()->json(['ERROR_ID' => 14]);
         }
 
         $school_settings = SchoolSettings::where('child', $child->id)->first();

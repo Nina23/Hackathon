@@ -81,6 +81,10 @@ class ParentsController extends Controller {
 
 
         $parent = Parents::where('email', $request['MAIL'])->first();
+        
+        if($parent->activated==1){
+            return response()->json(['ERORR_ID' => 14]);
+        }
 
         if ($parent == null) {
             $response = ['SUCCESS' => false, 'ERROR_ID' => 3];
@@ -186,6 +190,10 @@ class ParentsController extends Controller {
 
 
         $parent = Parents::where('unique_id', $request['UNIQUE_ID'])->first();
+        
+        if($parent->activated==1){
+            return response()->json(['ERORR_ID' => 14]);
+        }
         if ($parent == null) {
             $response = ['SUCCESS' => false, 'ERROR_ID' => 3];
             return response()->json($response);
@@ -212,6 +220,9 @@ class ParentsController extends Controller {
         }
 
         $parent = Parents::where('email', $request['MAIL'])->first();
+        if($parent->activated==1){
+            return response()->json(['ERORR_ID' => 14]);
+        }
 
         if ($parent != null) {
 
@@ -256,6 +267,10 @@ class ParentsController extends Controller {
         }
 
         $parent = Parents::where('email', $request['MAIL'])->first();
+        
+        if($parent->activated==1){
+            return response()->json(['ERORR_ID' => 14]);
+        }
 
         if ($parent != null) {
             $reset_pass = ResetPass::where('token', $request['TEMP_PASS'])->where('email', $request['MAIL'])->first();
