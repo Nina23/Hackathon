@@ -36,14 +36,15 @@ class ApplicationController extends Controller {
         if (config('token.token') != $request['TOKEN']) {
             return response()->json(['ERORR_ID' => 15]);
         }
+        
+        
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
 
-        $appliactions = Applications::where('child', $request['CHILD_ID'])->get();
-
+        $appliactions = Applications::where('child', $child->id)->get();
 
 
         $black_list = [];
@@ -72,7 +73,7 @@ class ApplicationController extends Controller {
             }
         }
 
-        $response = ["CHILD_ID" => $request['CHILD_ID'], "APP_BLACKLIST" => array_values($black_list), "APP_WHITELIST" => array_values($white_list)];
+        $response = ["CHILD_ID" => $child->id, "APP_BLACKLIST" => array_values($black_list), "APP_WHITELIST" => array_values($white_list)];
         return response()->json($response);
     }
 
@@ -100,27 +101,25 @@ class ApplicationController extends Controller {
         }
 
         foreach ($request["ALL_INSTALLED_APPLICATIONS"] as $instaled_app) {
-            $used_app = Applications::where('name_of_package', $instaled_app['PACKAGE_NAME'])->where('child', $request['CHILD_ID'])->first();
+            $used_app = Applications::where('name_of_package', $instaled_app['PACKAGE_NAME'])->where('child', $child->id)->first();
 
             if ($used_app == "") {
                 // return response()->json(['MESSAGE'=>'ovde si']);
-                Applications::create(['child' => $request['CHILD_ID'], 'name_of_package' => $instaled_app['PACKAGE_NAME'], 'name_of_application' => $instaled_app['APPLICATION_NAME'], 'status' => 1]);
+                Applications::create(['child' => $child->id, 'name_of_package' => $instaled_app['PACKAGE_NAME'], 'name_of_application' => $instaled_app['APPLICATION_NAME'], 'status' => 1]);
             }
         }
 
         foreach ($request['APPLICATION_USAGE'] as $app_usage) {
 
-            $app = Applications::where('name_of_package', $app_usage['PACKAGE_NAME'])->where('child', $request['CHILD_ID'])->first();
+            $app = Applications::where('name_of_package', $app_usage['PACKAGE_NAME'])->where('child', $child->id)->first();
             if ($app == NULL) {
 
-                $new_app = Applications::create(['child' => $request['CHILD_ID'], 'name_of_package' => $app_usage['PACKAGE_NAME'], 'name_of_application' => $app_usage['APPLICATION_NAME'], 'status' => 1]);
-                UseApp::create(['application' => $new_app['id'], 'child' => $request['CHILD_ID'], 'interval' => $app_usage['INTERVAL'], 'time_of_creation' => $app_usage['DAY']]);
+                $new_app = Applications::create(['child' => $child->id, 'name_of_package' => $app_usage['PACKAGE_NAME'], 'name_of_application' => $app_usage['APPLICATION_NAME'], 'status' => 1]);
+                UseApp::create(['application' => $new_app['id'], 'child' => $child->id, 'interval' => $app_usage['INTERVAL'], 'time_of_creation' => $app_usage['DAY']]);
             } else {
-                // $use_app=  UseApp::where('application',$app->id)->where('child',$request['CHILD_ID'])->first();
-                //if($schedule_app==null)
-                UseApp::create(['application' => $app['id'], 'child' => $request['CHILD_ID'], 'interval' => $app_usage['INTERVAL'], 'time_of_creation' => $app_usage['DAY']]);
-                // else
-                // $use_app->update(['interval'=>$app_usage['INTERVAL'],'time_of_creation'=>$app_usage['TIME']]);
+
+                UseApp::create(['application' => $app['id'], 'child' => $child->id, 'interval' => $app_usage['INTERVAL'], 'time_of_creation' => $app_usage['DAY']]);
+
             }
         }
 
@@ -149,7 +148,7 @@ class ApplicationController extends Controller {
             return response()->json(['ERROR_ID' => 9]);
         }
 
-        $net_usage = ScheduleNet::where('child', $request['CHILD_ID'])->get();
+        $net_usage = ScheduleNet::where('child', $child->id)->get();
         $counter = 0;
         $net_list = [];
         if ($net_usage == null)
@@ -159,7 +158,7 @@ class ApplicationController extends Controller {
             $net_list[$counter] = ['DAY' => $net->day, 'INTERVAL' => $net->interval, 'TIME' => $net->time];
             $counter++;
         }
-        $response = ["CHILD_ID" => $request['CHILD_ID'], "INTERNET_SCHEDULE" => array_values($net_list)];
+        $response = ["CHILD_ID" => $child->id, "INTERNET_SCHEDULE" => array_values($net_list)];
 
         return response()->json($response);
     }
@@ -187,7 +186,7 @@ class ApplicationController extends Controller {
 
 
 
-        $shedule_child = ScheduleChild::where('child', $request['CHILD_ID'])->get();
+        $shedule_child = ScheduleChild::where('child', $child->id)->get();
 
         $event_list = [];
         $counter = 0;
@@ -205,13 +204,13 @@ class ApplicationController extends Controller {
             ];
             $counter++;
         }
-        $school_settings = SchoolSettings::where('child', $request['CHILD_ID'])->first();
+        $school_settings = SchoolSettings::where('child', $child->id)->first();
 
         if ($school_settings == null) {
             $school_settings['school_state'] = "";
             $school_settings['week_switch'] = "";
         }
-        $response = ["CHILD_ID" => $request['CHILD_ID'],
+        $response = ["CHILD_ID" => $child->id,
             "SCHOOL_STATE" => $school_settings['school_state'],
             "WEEK_SWITCH" => $school_settings['week_switch'],
             "EVENTS_SCHEDULE" => array_values($event_list)];
@@ -251,7 +250,7 @@ class ApplicationController extends Controller {
             if (!array_key_exists('PROVIDER', $location))
                 $location['PROVIDER'] = "";
 
-            Location::create(['child' => $request['CHILD_ID'], 'lang' => $location['LANG'], 'lat' => $location['LAT'], 'time_of_location' => $location['TIME'],
+            Location::create(['child' => $child->id, 'lang' => $location['LANG'], 'lat' => $location['LAT'], 'time_of_location' => $location['TIME'],
                 'speed' => $location['SPEED'],
                 'state' => $location['STATE'],
                 'accuracy' => $location['ACCURACY'],
@@ -305,7 +304,7 @@ class ApplicationController extends Controller {
             $request['EVENT_ALL_DAY'] = false;
 
         if ($request['ACTION'] == 1) {
-            ScheduleChild::create(['child' => $request['CHILD_ID'],
+            ScheduleChild::create(['child' => $child->id,
                 'time' => $request['TIME'],
                 'note' => $request['EVENT'],
                 'end_time' => $request['END_TIME'],
@@ -317,7 +316,7 @@ class ApplicationController extends Controller {
                 'event_all_day' => $request['EVENT_ALL_DAY']
             ]);
         } elseif ($request['ACTION'] == 2) {
-            $shedule_child = ScheduleChild::where('id', $request['EVENT_ID'])->where('child', $request['CHILD_ID'])->first();
+            $shedule_child = ScheduleChild::where('id', $request['EVENT_ID'])->where('child',$child->id)->first();
             $shedule_child->update(['time' => $request['TIME'],
                 'note' => $request['EVENT'],
                 'end_time' => $request['END_TIME'],
@@ -329,7 +328,7 @@ class ApplicationController extends Controller {
                 'event_all_day' => $request['EVENT_ALL_DAY']
             ]);
         } elseif ($request['ACTION'] == 3) {
-            $shedule_child = ScheduleChild::where('id', $request['EVENT_ID'])->where('child', $request['CHILD_ID'])->first();
+            $shedule_child = ScheduleChild::where('id', $request['EVENT_ID'])->where('child', $child->id)->first();
             $shedule_child->delete();
         } else {
             $response = ['ACTION' => '0'];
@@ -357,7 +356,7 @@ class ApplicationController extends Controller {
         if ($child == null) {
             return response()->json(['ERROR_ID' => 9]);
         }
-        $applications = Applications::where('child', $request['CHILD_ID'])->get();
+        $applications = Applications::where('child', $child->id)->get();
         $app_list = [];
         $counter_all_app = 0;
         foreach ($applications as $app) {
@@ -375,7 +374,7 @@ class ApplicationController extends Controller {
 
             $use_app_list = [];
             $counter_app = 0;
-            $use_app = UseApp::where('child', $request['CHILD_ID'])->where('application', $app->id)->orderBy('time_of_creation', 'desc')->get();
+            $use_app = UseApp::where('child', $child->id)->where('application', $app->id)->orderBy('time_of_creation', 'desc')->get();
             //return print_r($use_app);
             if ($use_app != NULL) {
                 foreach ($use_app as $app_day) {
@@ -417,7 +416,7 @@ class ApplicationController extends Controller {
 
 
 
-        $app = Applications::where('child', $request['CHILD_ID'])->where('id', $request['APPLICATION_ID'])->first();
+        $app = Applications::where('child', $child->id)->where('id', $request['APPLICATION_ID'])->first();
 
         if ($app != null) {
 
@@ -483,7 +482,7 @@ class ApplicationController extends Controller {
             return response()->json(['ERROR_ID' => 9]);
         }
 
-        $schedule_app = ScheduleApp::create(['child' => $request['CHILD_ID'], 'application' => $request['APPLICATION_ID'], 'day' => $request['DAY'], 'time' => $request['TIME'], 'interval' => $request['INTERVAL']]);
+        $schedule_app = ScheduleApp::create(['child' =>$child->id, 'application' => $request['APPLICATION_ID'], 'day' => $request['DAY'], 'time' => $request['TIME'], 'interval' => $request['INTERVAL']]);
 
         $response = ['APPLICATION_ID' => $schedule_app['application'], 'SCHEDULE_ID' => $schedule_app['id'], 'DAY' => $schedule_app['day'], 'INTERVAL' => $schedule_app['interval'], 'TIME' => $schedule_app['time']];
         return response()->json($response);
@@ -631,7 +630,7 @@ class ApplicationController extends Controller {
 
 
         try {
-            $application = Applications::where('id', $request['APPLICATION'])->where('child', $request['CHILD_ID'])->first();
+            $application = Applications::where('id', $request['APPLICATION'])->where('child', $child->id)->first();
         } catch (\Exception $e) {
             return response()->json(['ERROR_ID' => 10]);
         }
@@ -671,7 +670,7 @@ class ApplicationController extends Controller {
             return response()->json(['ERROR_ID' => 9]);
         }
 
-        $school_settings = SchoolSettings::where('child', $request['CHILD_ID'])->first();
+        $school_settings = SchoolSettings::where('child', $child->id)->first();
 
         if ($school_settings != null) {
 
@@ -685,7 +684,7 @@ class ApplicationController extends Controller {
             }
         } else {
             try {
-                SchoolSettings::create(['child' => $request['CHILD_ID'], 'school_state' => $request['SCHOOL_STATE'], 'week_switch' => $request['WEEK_SWITCH']]);
+                SchoolSettings::create(['child' => $child->id, 'school_state' => $request['SCHOOL_STATE'], 'week_switch' => $request['WEEK_SWITCH']]);
                 $response = ['SUCCESS' => true];
                 return response()->json($response);
             } catch (\Exception $e) {
