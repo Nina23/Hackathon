@@ -707,7 +707,10 @@ class ApplicationController extends Controller {
         foreach ($parents as $parent) {
 
             if (strcmp($parent['number'], $request['PHONE']) === 0) {
-                
+                $parent_find = ParentsChild::where('parents', $parent->id)->first();
+                if( $parent_find->activated==1){
+                    return response()->json(['ERORR_ID' => 14]);
+                }
               
                 $contition = 1;
                 $unique = uniqid() . '_' . uniqid();
@@ -718,7 +721,7 @@ class ApplicationController extends Controller {
                 try {
                     $child = Child::create($child_data);
 
-                    $parent_find = ParentsChild::where('parents', $parent->id)->first();
+                    
                     
                     
 
