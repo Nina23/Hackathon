@@ -722,8 +722,6 @@ class ApplicationController extends Controller {
 
                     $parent_find = ParentsChild::where('parents', $parent->id)->first();
                     
-                    
-
                     if ($parent_find == "") {
 
                         $parentChild_data = ['parents' => $parent->id,
@@ -752,7 +750,7 @@ class ApplicationController extends Controller {
                                 'IMAGE' => $parent['image'],
                                 'STATUS' => $parent['status'],
                                 'ACTIVATED' => $parent['activated'],
-                                
+                                'PASSWORD'=>$parent['password'],
                                 'FRENDINO_PRO' => $parent['frendino_pro'],
                             ];
                             return response()->json(['SUCCESS' => true, 'CHILD' => array_values($child_response), 'PARENT' => array_values($parent_response)]);
