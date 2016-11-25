@@ -753,7 +753,7 @@ class ApplicationController extends Controller {
                                 'PASSWORD'=>$parent['password'],
                                 'FRENDINO_PRO' => $parent['frendino_pro'],
                             ];
-                            return response()->json(['SUCCESS' => true, 'CHILD' => array_values($child_response), 'PARENT' => array_values($parent_response)]);
+                            return response()->json(['SUCCESS' => true, 'CHILD' => $child_response, 'PARENT' => $parent_response]);
                         } catch (\Exception $e) {
                             $response = ['SUCCESS' => false, 'ERROR_ID' => 12];
                             return response()->json($response);
