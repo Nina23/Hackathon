@@ -35,7 +35,7 @@ class ParentsController extends Controller {
         }
         
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
        
@@ -76,14 +76,14 @@ class ParentsController extends Controller {
         }
         
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
 
         $parent = Parents::where('email', $request['MAIL'])->first();
         
         if($parent->activated==1){
-            return response()->json(['ERORR_ID' => 14]);
+            return response()->json(['ERROR_ID' => 14]);
         }
 
         if ($parent == null) {
@@ -155,7 +155,7 @@ class ParentsController extends Controller {
         }
         
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         try {
@@ -185,14 +185,14 @@ class ParentsController extends Controller {
             return response()->json(['ERROR_ID' => 8]);
         }
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
 
         $parent = Parents::where('unique_id', $request['UNIQUE_ID'])->first();
         
         if($parent->activated==1){
-            return response()->json(['ERORR_ID' => 14]);
+            return response()->json(['ERROR_ID' => 14]);
         }
         if ($parent == null) {
             $response = ['SUCCESS' => false, 'ERROR_ID' => 3];
@@ -216,12 +216,12 @@ class ParentsController extends Controller {
             return response()->json(['ERROR_ID' => 8]);
         }
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $parent = Parents::where('email', $request['MAIL'])->first();
         if($parent->activated==1){
-            return response()->json(['ERORR_ID' => 14]);
+            return response()->json(['ERROR_ID' => 14]);
         }
 
         if ($parent != null) {
@@ -263,13 +263,13 @@ class ParentsController extends Controller {
             return response()->json(['ERROR_ID' => 8]);
         }
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $parent = Parents::where('email', $request['MAIL'])->first();
         
         if($parent->activated==1){
-            return response()->json(['ERORR_ID' => 14]);
+            return response()->json(['ERROR_ID' => 14]);
         }
 
         if ($parent != null) {

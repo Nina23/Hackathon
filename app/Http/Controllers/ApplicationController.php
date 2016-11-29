@@ -32,7 +32,7 @@ class ApplicationController extends Controller {
         }
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -102,7 +102,7 @@ class ApplicationController extends Controller {
 
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -166,7 +166,7 @@ class ApplicationController extends Controller {
 
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -218,7 +218,7 @@ class ApplicationController extends Controller {
 
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -287,7 +287,7 @@ class ApplicationController extends Controller {
 
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -347,7 +347,7 @@ class ApplicationController extends Controller {
         }
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -436,7 +436,7 @@ class ApplicationController extends Controller {
             return response()->json(['ERROR_ID' => 8]);
         }
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -510,7 +510,7 @@ class ApplicationController extends Controller {
 
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -561,7 +561,7 @@ class ApplicationController extends Controller {
         }
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -608,7 +608,7 @@ class ApplicationController extends Controller {
 
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -649,7 +649,7 @@ class ApplicationController extends Controller {
             return response()->json(['ERROR_ID' => 8]);
         }
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -698,7 +698,7 @@ class ApplicationController extends Controller {
         }
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
 
@@ -708,7 +708,7 @@ class ApplicationController extends Controller {
 
             if (strcmp($parent['number'], $request['PHONE']) === 0) {
                 if($parent->activated==1){
-                        return response()->json(['ERORR_ID' => 14]);
+                        return response()->json(['ERROR_ID' => 14]);
                     }
 
                 $contition = 1;
@@ -789,7 +789,7 @@ class ApplicationController extends Controller {
         }
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
@@ -846,7 +846,7 @@ class ApplicationController extends Controller {
         }
 
         if (config('token.token') != $request['TOKEN']) {
-            return response()->json(['ERORR_ID' => 15]);
+            return response()->json(['ERROR_ID' => 15]);
         }
 
         $child = Child::where('unique_id', $request['CHILD_ID'])->first();
