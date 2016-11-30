@@ -404,6 +404,9 @@ class ApplicationController extends Controller {
             ]);
         } elseif ($request['ACTION'] == 2) {
             $shedule_child = ScheduleChild::where('id', $request['EVENT_ID'])->where('child', $child->id)->first();
+            if(!array_key_exists('TIME', $request->all())){
+                $request['TIME']=$shedule_child['time'];
+            }
             $shedule_child->update(['time' => $request['TIME'],
                 'note' => $request['EVENT'],
                 'end_time' => $request['END_TIME'],
