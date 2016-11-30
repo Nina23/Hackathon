@@ -335,7 +335,7 @@ class ApplicationController extends Controller {
 
     public function saveEvent(Request $request) {
 
-        return print_r($request->all());
+        //return print_r($request->all());
         $rules = array(
             'CHILD_ID' => 'required',
             'TOKEN' => 'required'
