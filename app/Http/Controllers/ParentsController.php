@@ -95,6 +95,7 @@ class ParentsController extends Controller {
             $parents_child = ParentsChild::where('parents', $parent->id)->get();
             $list_children = [];
             $counter = 0;
+            
             foreach ($parents_child as $child_id) {
 
                 $child = Child::where('id', $child_id->child)->first();
@@ -113,13 +114,14 @@ class ParentsController extends Controller {
                     $counter++;
                 }
             }
+            
 
             if ($parent->activated == 1) {
-                $response['ERROR_ID'] = 14;
+                $response1 = ['ERROR_ID'=>14];
                 $parent->update(['activated' => 2]);
             }
 
-            $response = [
+            $response2 = [
                 'SUCCESS' => true,
                 'PARENT_ID' => $parent['id'],
                 'UNIQUE_ID' => $parent['unique_id'],
@@ -134,7 +136,7 @@ class ParentsController extends Controller {
                 'FRENDINO_PRO' => $parent['frendino_pro'],
                 'CHILDREN' => array_values($list_children)];
 
-
+            $response=  array_merge($response1,$response2);
 
 
 
