@@ -33,12 +33,12 @@ class ParentsController extends Controller {
         if ($validator->fails()) {
             return response()->json(['ERROR_ID' => 8]);
         }
-        
+
         if (config('token.token') != $request['TOKEN']) {
             return response()->json(['ERROR_ID' => 15]);
         }
 
-       
+
         $unique = uniqid() . '_' . uniqid();
 
         $parent_data = ['unique_id' => $unique,
@@ -74,17 +74,15 @@ class ParentsController extends Controller {
         if ($validator->fails()) {
             return response()->json(['ERROR_ID' => 8]);
         }
-        
+
         if (config('token.token') != $request['TOKEN']) {
             return response()->json(['ERROR_ID' => 15]);
         }
 
 
         $parent = Parents::where('email', $request['MAIL'])->first();
-        
-        if($parent->activated==1){
-            return response()->json(['ERROR_ID' => 14]);
-        }
+
+
 
         if ($parent == null) {
             $response = ['SUCCESS' => false, 'ERROR_ID' => 3];
@@ -115,6 +113,12 @@ class ParentsController extends Controller {
                     $counter++;
                 }
             }
+
+            if ($parent->activated == 1) {
+                $response['ERROR_ID'] = 14;
+                $parent->update(['activated' => 2]);
+            }
+
             $response = [
                 'SUCCESS' => true,
                 'PARENT_ID' => $parent['id'],
@@ -132,6 +136,8 @@ class ParentsController extends Controller {
 
 
 
+
+
             return response()->json($response);
         } else {
             $response = ['SUCCESS' => false, 'ERROR_ID' => 4];
@@ -145,7 +151,6 @@ class ParentsController extends Controller {
             'PARENT_ID' => 'required',
             'ACTIVATED' => 'required',
             'TOKEN' => 'required'
-
         );
         // return print_r($request->all());
 
@@ -153,7 +158,7 @@ class ParentsController extends Controller {
         if ($validator->fails()) {
             return response()->json(['ERROR_ID' => 8]);
         }
-        
+
         if (config('token.token') != $request['TOKEN']) {
             return response()->json(['ERROR_ID' => 15]);
         }
@@ -165,7 +170,7 @@ class ParentsController extends Controller {
         }
         if ($parent != null) {
 
-            $parent->update(['activated' => intval($request['ACTIVATED'])]);
+            $parent->update(['activated' => intval($request['ACTIVATED']), 'frendino_pro' => 1]);
             $response = ['SUCCESS' => true];
             return response()->json($response);
         } else {
@@ -190,8 +195,8 @@ class ParentsController extends Controller {
 
 
         $parent = Parents::where('unique_id', $request['UNIQUE_ID'])->first();
-        
-        if($parent->activated==1){
+
+        if ($parent->activated == 1) {
             return response()->json(['ERROR_ID' => 14]);
         }
         if ($parent == null) {
@@ -208,7 +213,7 @@ class ParentsController extends Controller {
 
         $rules = array(
             'MAIL' => 'required|email',
-            'TOKEN'=>'required'
+            'TOKEN' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -220,13 +225,13 @@ class ParentsController extends Controller {
         }
 
         $parent = Parents::where('email', $request['MAIL'])->first();
-        if($parent->activated==1){
+        if ($parent->activated == 1) {
             return response()->json(['ERROR_ID' => 14]);
         }
 
         if ($parent != null) {
 
-            $token = str_random(64);
+            $token = str_random(12);
 
             ResetPass::create(['email' => $request['MAIL'], 'token' => $token]);
 
@@ -267,8 +272,8 @@ class ParentsController extends Controller {
         }
 
         $parent = Parents::where('email', $request['MAIL'])->first();
-        
-        if($parent->activated==1){
+
+        if ($parent->activated == 1) {
             return response()->json(['ERROR_ID' => 14]);
         }
 
