@@ -114,7 +114,7 @@ class ParentsController extends Controller {
                     $counter++;
                 }
             }
-            
+            $response1=[];
 
             if ($parent->activated == 1) {
                 $response1 = ['ERROR_ID'=>14];
