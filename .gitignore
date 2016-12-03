@@ -4,4 +4,6 @@
 Homestead.yaml
 Homestead.json
 .env
-/nbproject/private/
+/public/storage
+/nbproject
+/.idea
